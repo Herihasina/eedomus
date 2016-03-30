@@ -1,0 +1,354 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+  <title>eedomus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: gap: http: https:;">
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+  <link rel="apple-touch-icon" sizes="57x57" href="img/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="img/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="img/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="img/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="img/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="img/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="img/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="img/android-chrome-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="img/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="img/favicon-16x16.png" sizes="16x16">
+  <link rel="manifest" href="img/manifest.json">
+  <link rel="mask-icon" href="img/box_eedomus.svg" color="#5bbad5">
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <meta name="apple-mobile-web-app-title" content="eedomus">
+  <meta name="application-name" content="eedomus">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="msapplication-TileImage" content="img/mstile-144x144.png">
+  <meta name="msapplication-config" content="img/browserconfig.xml">
+  <meta name="theme-color" content="#6d84a3">
+
+  <link rel="stylesheet" href="css/font-awesome.min.css" />
+  <link rel="stylesheet" href="css/jquery.mobile.min.css" />
+  <link rel="stylesheet" href="css/waves.min.css" />
+  <link rel="stylesheet" href="css/nativedroid2.css" />
+  <link rel="stylesheet" href="css/eedomus.mobile.css" />
+
+</head> 
+<body style="display:none;">
+
+<div data-role="page" id="loading"></div>
+
+<!-- Panels page  -->
+<div data-role="page" id="home" data-title="eedomus">
+
+  <!-- Panel menu -->
+  <div data-role="panel" data-position="left" data-display="overlay" data-position-fixed="true" data-theme="a" id="nav_panel">
+    <ul data-role="listview" data-inset="false">
+      <li data-role="list-divider"><span data-translate="true">Affichage</span></li>
+      <li><a href="#home"><i class="zmdi zmdi-home"></i><span data-translate="true">Accueil</span></a></li>
+      <li><a href="#notifications_page"><i class="zmdi zmdi-comment-text"></i><span data-translate="true">Notifications</span></a></li>
+      <!--<li data-role="list-divider">Configuration</li>
+      <li><a href="#terminal_parameters_page"><i class="zmdi zmdi-wrench"></i>Paramètres terminal</a></li>
+      <li><a href="#zwave_page"><i class="zmdi zmdi-portable-wifi"></i>Réseau Z-Wave</a></li>
+      <li><a href="#diag_page"><i class="zmdi zmdi-info"></i>Diagnostic</a></li>-->
+      
+      <li class="box-config" data-role="list-divider"><span data-translate="true">Box eedomus</span></li>
+      <li class="box-config"><a href="/config" target="_blank"><i class="zmdi zmdi-settings"></i><span data-translate="true">Configuration réseau</span></a></li>
+      <li class="box-config"><a href="/script" target="_blank"><i class="zmdi zmdi-code"></i><span data-translate="true">Scripts utilisateur</span></a></li>
+      <li class="box-config restart-drivers"><a href="#restart_drivers"><i class="zmdi zmdi-refresh-sync"></i><span data-translate="true">Restart drivers</span></a></li>
+      
+      <li data-role="list-divider"><span data-translate="true">eedomus</span></li>
+      <li><a href="#refresh"><i class="zmdi zmdi-refresh"></i><span data-translate="true">Synchroniser</span></a></li>
+      <li><a href="#users_page"><i class="zmdi zmdi-account"></i><span data-translate="true">Changer d'utilisateur</span></a></li>
+      <li><a href="#logout"><i class="zmdi zmdi-power-off"></i><span data-translate="true">Déconnexion</span></a></li>
+    </ul>
+  </div>
+
+  <div data-role="header" data-position="fixed" data-tap-toggle="false">
+    <h1 id="home_header">&nbsp;</h1>
+    <a href="#nav_panel" class="ui-btn ui-btn-left"><i class="zmdi zmdi-menu"></i></a>
+    <a href="#favorite_page" class="ui-btn ui-btn-right"><i class="zmdi zmdi-star-border"></i></a>
+    <a href="#" class="ui-btn ui-btn-right lan-icon"></a>
+  </div>
+
+  <div data-role="content" id="panels_icons" class="main-panel"></div>
+  <!-- Home screen Logo (Large screen only) -->
+  <div data-role="content" class="secondary-panel"></div>
+  
+</div>
+
+<!-- Widgets page  -->
+<div data-role="page" id="widgets_page" data-widget-id="" data-title="eedomus">
+
+  <!-- inner button menu -->
+   <div data-role="panel" data-position="right" data-display="overlay" data-position-fixed="true" data-theme="a" id="menu-panel">
+    <ul data-role="listview" data-inset="false">      
+        <li><a href="#" id="edit-entry-btn"><i class="zmdi zmdi-edit"></i>&nbsp;&nbsp;<span data-translate="true">Modifier</span></a></li>
+    </ul>
+  </div>
+  <!-- end inner button menu -->
+
+  <div data-role="header" data-position="fixed" data-tap-toggle="false">
+    <h1 id="widgets_header">&nbsp;</h1>
+    <a href="#" class="ui-btn ui-btn-left" data-rel="back"><i class="zmdi zmdi-arrow-back"></i></a>
+    <a href="#favorite_page" class="ui-btn ui-btn-right"><i class="zmdi zmdi-star-border"></i></a>
+    <a href="#menu-panel" class="ui-btn ui-btn-right menu-header-widget"><i class="zmdi zmdi-menu"></i></a>
+    <a href="#" class="ui-btn ui-btn-right lan-icon"></a>
+  </div>
+
+  <div class="main-panel"></div>
+
+  <div data-role="content" class="secondary-panel">
+    <ul data-role="listview" id="widgets_list"></ul>
+  </div>
+</div>
+
+<!-- Modification/Edit page -->
+<div data-role="page" id="modification-page" data-title="eedomus">
+  <div data-role='header' data-position="fixed">
+    <h1>Modifier</h1>
+    <a href="#widgets_page" class="ui-btn ui-btn-left"><i class="zmdi zmdi-arrow-back"></i></a>
+  </div>
+  <div data-role='main' class="ui-content">
+  <!-- <div class="fields"> -->
+    <label for="textinput-6">Nom:</label>
+    <input name="textinput-6" id="name-periph" placeholder="" value="" data-mini="true" type="text">
+  <!-- </div> -->
+  <!-- <div class="fields"> -->
+    <label for="select-choice" class="select">Pièces:</label>
+    <select name="select-choice" id="select-choice" data-native-menu="false"></select>
+  <!-- </div>    -->
+  <button class="ui-btn ui-btn-inline" id="cancel-btn">Annuler</button>
+  <button class="ui-btn ui-btn-inline" id="accept-btn">Valider</button>
+  </div>
+</div>
+<!-- End Modification/Edit page -->
+
+<!-- Periph page -->
+<div data-role="page" id="periph_page" data-title="eedomus">
+
+  <div data-role="header" data-position="fixed" data-tap-toggle="false">
+    <h1 id="periph_header">&nbsp;</h1>
+    <a href="#" class="ui-btn ui-btn-left" data-rel="back"><i class="zmdi zmdi-arrow-back"></i></a>
+    <a href="#favorite_page" class="ui-btn ui-btn-right"><i class="zmdi zmdi-star-border"></i></a>
+    <a href="#" class="ui-btn ui-btn-right lan-icon"></a>
+  </div>
+
+  <div class="main-panel"></div>
+
+  <div data-role="content" class="secondary-panel">  
+    <ul data-role="listview" id="periph_list"></ul>
+  </div>
+
+</div>
+
+<!-- Wizard page -->
+<div data-role="page" id="wizard_page" data-title="eedomus">
+
+  <div data-role="header" data-position="fixed" data-tap-toggle="false">
+    <h1 id="wizard_header">&nbsp;</h1>
+    <a href="#" class="ui-btn ui-btn-left" data-rel="back"><i class="zmdi zmdi-arrow-back"></i></a>
+    <a href="#favorite_page" class="ui-btn ui-btn-right"><i class="zmdi zmdi-star-border"></i></a>
+    <a href="#" class="ui-btn ui-btn-right lan-icon"></a>
+  </div>
+
+  <div class="main-panel"></div>
+
+  <div data-role="content" class="secondary-panel">  
+    <ul data-role="listview" id="wizard_list"></ul>
+  </div>
+
+</div>
+
+<!-- Graph page -->
+<div data-role="page" id="history_page" data-title="eedomus">
+
+  <div data-role="header" data-position="fixed" data-tap-toggle="false">
+    <h1 id="history_header">&nbsp;</h1>
+    <a href="#" class="ui-btn ui-btn-left" data-rel="back"><i class="zmdi zmdi-arrow-back"></i></a>
+    <a href="#favorite_page" class="ui-btn ui-btn-right"><i class="zmdi zmdi-star-border"></i></a>
+    <a href="#" class="ui-btn ui-btn-right menu-header-widget"><i class="zmdi zmdi-menu"></i></a>
+    <a href="#" class="ui-btn ui-btn-right lan-icon"></a>
+
+    <ul data-role="nd2tabs" data-swipe="true">
+      <li data-tab="history" data-translate="true">Historique</li>
+      <li data-tab="24hours" data-tab-active="true" data-translate="true">24h</li>
+      <li data-tab="4days" data-translate="true">4 jours</li>
+      <li data-tab="4weeks" data-translate="true">4 semaines</li>
+      <li data-tab="4months" data-translate="true">4 mois</li>
+      <li data-tab="1year" data-translate="true">1 an</li>
+    </ul>
+  </div>
+
+  <div class="ui-content">
+    <div data-role="nd2tab" data-tab="history">
+      <ul data-role="listview" id="history_list"></ul>
+    </div>
+    <div data-role="nd2tab" data-tab="24hours" class="graph">
+      <div id="hightchart_24hours"></div>
+    </div>
+    <div data-role="nd2tab"  data-tab="4days" class="graph">
+      <div id="hightchart_4days"></div>
+    </div>
+    <div data-role="nd2tab"  data-tab="4weeks" class="graph">
+      <div id="hightchart_4weeks"></div>
+    </div>
+    <div data-role="nd2tab"  data-tab="4months" class="graph">
+      <div id="hightchart_4months"></div>
+    </div>
+    <div data-role="nd2tab"  data-tab="1year" class="graph">
+      <div id="hightchart_1year"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Favorite page  -->
+<div data-role="page" id="favorite_page" data-widget-id="" data-title="eedomus">
+
+  <div data-role="header" data-position="fixed" data-tap-toggle="false">
+    <h1 data-translate="true">Favoris</h1>
+    <a href="#" class="ui-btn ui-btn-left" data-rel="back"><i class="zmdi zmdi-arrow-back"></i></a>
+    <a href="#" class="ui-btn ui-btn-right" data-rel="back"><i class="zmdi zmdi-star"></i></a>
+    <a href="#edit_favorite_page" class="ui-btn ui-btn-right ui-edit-favorite"><i class="zmdi zmdi-edit"></i></a>
+    <a href="#" class="ui-btn ui-btn-right lan-icon"></a>
+  </div>
+
+  <div class="main-panel"></div>
+
+  <div data-role="content" class="secondary-panel">
+    <ul data-role="listview" id="favorite_list"></ul>
+  </div>
+
+</div>
+
+<!-- Edit Favorite page  -->
+<div data-role="page" id="edit_favorite_page" data-widget-id="" data-title="eedomus">
+
+  <div data-role="header" data-position="fixed" data-tap-toggle="false">
+    <h1 data-translate="true">Choix des favoris</h1>
+    <a href="#" class="ui-btn ui-btn-left" data-rel="back"><i class="zmdi zmdi-arrow-back"></i></a>
+    <a href="#" class="ui-btn ui-btn-right" data-rel="back"><i class="zmdi zmdi-check"></i></a>
+  </div>
+
+  <div class="main-panel"></div>
+
+  <div data-role="content" class="secondary-panel">
+    <ul data-role="listview" id="edit_favorite_list" class="ui-mini-list"></ul>
+  </div>
+
+</div>
+
+<!-- Users page -->
+<div data-role="page" id="users_page" data-title="eedomus">
+
+  <div data-role="header" data-position="fixed" data-tap-toggle="false">
+    <h1 data-translate="true">Changer de compte</h1>
+    <a href="#" class="ui-btn ui-btn-left" data-rel="back"><i class="zmdi zmdi-arrow-back"></i></a>
+  </div>
+
+  <div data-role="content">  
+    <ul data-role="listview" id="users_list"></ul>
+  </div>
+
+</div>
+
+<!-- Notifications page -->
+<div data-role="page" id="notifications_page" data-title="eedomus">
+
+  <div data-role="header" data-position="fixed" data-tap-toggle="false">
+    <h1 data-translate="true">Notifications</h1>
+    <a href="#" class="ui-btn ui-btn-left" data-rel="back"><i class="zmdi zmdi-arrow-back"></i></a>
+  </div>
+
+  <div data-role="content">  
+    <ul data-role="listview" id="notifications_list"></ul>
+  </div>
+
+</div>
+
+<!-- IOT comissioning demo page -->
+<div data-role="page" id="iot_comissionning_page" data-title="eedomus">
+  <div data-role="header" data-position="fixed" data-tap-toggle="false">
+    <h1 data-translate="true">New Zigbee device</h1>
+  </div>
+  <div data-role="content">  
+    <form id="comissioning_form">
+    <!-- image src must be changed for local use -->
+    <img src="img/zigbee_dim.png" style="display: block;margin: auto;"><br>
+        <label for="iot_name" style="display:inline;" data-translate="true">Name</label>
+      <input type="text" name="iot_name" id="iot_name" data-mini="true" value="NXP CES Live"/>
+          <label for="iot_room" style="display:inline;" data-translate="true">Room</label>
+      <select name="iot_room" id="iot_room">
+      </select>
+      <button id="comissioning_submit" type="button" data-inline="true" data-translate="true">Save</button> 
+      <button id="comissioning_cancel" type="button" data-inline="true" data-translate="true">Cancel</button>
+    </form>
+  </div>
+</div>
+
+
+
+<!-- Login page -->
+<div data-role="page" id="login_page" data-title="eedomus">
+
+  <div data-role="header" data-position="fixed" data-tap-toggle="false">
+    <h1 data-translate="true">Connexion</h1>
+  </div>
+
+  <div data-role="content">  
+    <form id="login_form">
+
+      <label for="username" data-translate="true">Nom d'utilisateur</label>
+      <input type="text" name="username" id="username" autocorrect="off" autocapitalize="off" data-mini="true" />
+      <label for="password" data-translate="true">Mot de passe</label>
+      <input type="password" name="password" id="password" data-mini="true" />
+      <div class="box-ip">
+      <label for="box_ip" style="display:inline;" data-translate="true">IP Box eedomus</label><label style="color:#BBB;display:inline;margin-left:5px;" data-translate="true">(Permet une connexion directe, en cas de coupure internet)</label>
+      <input type="text" name="box_ip" id="box_ip" data-mini="true" />
+      </div>
+
+      <button id="login_submit" type="button" data-inline="true" data-translate="true">Connexion</button>
+      <button id="box_ip_btn" type="button" data-inline="true" data-translate="true">Connexion directe</button>
+    </form>
+  </div>
+
+</div>
+
+<!-- Notification page -->
+<div data-role="page" id="notification_page">
+  <!-- Notification popup  -->
+  <div data-role="popup" id="p" data-icon="delete" data-position-to="window" data-transition="pop" class="ui-notification ui-btn ui-corner-all ui-shadow ui-btn-inline" ><div class="notification_text"></div></div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="nd2-toast no-action nd2-toast-off">
+  <div class="nd2-toast-wrapper">
+    <span class="nd2-toast-message"></span>
+  </div>
+</div>
+
+<script>var webapp_mode = 'phonegap';</script>
+<script src="cordova.js"></script>
+<script src="js/winstore-jscompat.js"></script>
+<script src="js/fastclick.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery-ui.min.js"></script>
+<script src="js/jquery.form.min.js"></script>
+<script src="js/waves.min.js"></script>
+<script src="js/wow.min.js"></script>
+<script src="js/xdate.min.js"></script>
+<script src="js/xdate-fr.js"></script>
+<script src="js/highcharts.js"></script>
+<script src="js/functions.js"></script>
+<script src="js/polling.js"></script>
+<script src="js/index.js"></script>
+<script src="js/jquery.mobile.min.js"></script>
+<script src="js/nativedroid2.js"></script>
+</body>
+</html>

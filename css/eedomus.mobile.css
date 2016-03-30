@@ -1,0 +1,417 @@
+.ui-panel-open {
+  width: 250px;
+}
+
+.ui-listview>.ui-li-static, .ui-listview>.ui-li-divider, .ui-listview>li>a.ui-btn {
+  border: 1px solid #FFF !important; /* Hack for Windows phone menu */
+}
+
+.ui-listview>li h2 {
+  white-space: normal;
+}
+
+.ui-content .ui-listview  li {
+	/*commented to allow long wizard to show nicely*/
+  /*padding: 5px 0;
+  height: 70px;*/
+}
+
+.ui-content .ui-listview >li h2 {
+  margin: 0;
+}
+
+.ui-header .ui-title, .ui-footer .ui-title {
+  margin-right: 100px;
+  text-align: center;
+}
+
+.ui-thumbnail {
+  max-width: 64px !important;
+  max-height: 64px !important;
+  background-size: 64px 64px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  left: 1em;
+  z-index: 1;
+}
+.ui-thumbnail-over {
+  z-index: 2;
+}
+
+
+.macro_input {
+  width: 40px; /*a bit wider for iPad*/
+}
+
+.nd2Tabs {
+  margin-left: 15px;
+}
+
+#history_page .ui-content {
+  padding-left: 0 !important;
+}
+
+#history_page #history_list {
+  padding-left: 1em !important;
+}
+
+#nav_panel li i {
+  margin-right: 15px;
+}
+
+.main-panel {
+  padding: 1em 0em 0 0em;
+}
+
+.main-panel div {
+  vertical-align: top;
+  display: inline-block;
+  text-align: center;
+  width: 115px;
+  height: 105px;
+}
+
+.main-panel  img {
+  background-size: 64px 64px;
+  width: 64px;
+  height: 64px;
+}
+.main-panel span {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.main-panel .waves-effect {
+  width: 64px;
+  height: 64px;
+  margin: auto auto 6px auto;
+  border-radius: 10px;
+}
+
+.ui-content .ui-listview li.camera_card {
+  margin: -1.5em 1em;
+  height: auto;
+}
+
+.nd2-card {
+  max-width: 640px;
+  margin: 15px 0;
+}
+
+.nd2-card .card-action {
+  text-align: right;
+}
+.nd2-card .card-action a {
+  font-size: 11px;
+}
+
+.nd2-sidepanel-profile .profile-background {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: auto;
+  height: auto;
+  z-index: -1;
+}
+
+.ui-edit-favorite,
+.lan-icon {
+  margin-right: 38px !important;
+}
+
+#favorite_page .lan-icon {
+  margin-right: 76px !important;
+}
+
+.ui-header > .lan-icon {
+  background: #6D84A3 url("../img/box_eedomus.svg") 18px 19px/16px 16px no-repeat;
+  display: none;
+}
+
+.ui-header > .lan-icon-show {
+  display: inline;
+}
+
+.ui-content .ui-mini-list.ui-listview  li {
+  padding: 5px 0;
+  height: 36px;
+  min-height: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.ui-mini-list img.ui-thumbnail {
+  max-width: 32px !important;
+  max-height: 32px !important;
+  background-size: 32px 32px;
+  position: absolute;
+}
+
+.ui-mini-list>li p {
+  margin: auto 60px;
+  line-height: 36px;
+}
+
+.ui-mini-list .ui-flipswitch {
+  position:absolute;
+  top: 0;
+  right: 10px;
+  width:50px;
+  height:26px;
+  line-height: 30px;
+}
+.ui-mini-list .ui-flipswitch-active {
+  padding-left:0px;
+}
+.ui-mini-list .ui-flipswitch .ui-flipswitch-on,
+.ui-mini-list .ui-flipswitch.ui-flipswitch-active .ui-flipswitch-on {
+  width: 24px;
+  height: 24px;
+}
+.ui-mini-list .ui-flipswitch.ui-flipswitch-active .ui-flipswitch-on {
+  padding-top: 0px;
+  margin-left: 25px;
+  line-height: inherit;
+}
+
+.ui-mini-list .ui-flipswitch-off {
+  line-height: inherit;
+}
+
+#notifications_list li {
+  border-bottom: 1px solid #ddd;
+  height: auto;
+  min-height: 50px;
+}
+
+#notifications_list div span {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 13px;
+  font-weight: 300;
+}
+
+#notifications_list div img {
+  margin: 5px 0 5px 10px;
+}
+
+#notifications_list p {
+  margin: 0 10px;
+  font-weight: 500;
+}
+
+.camera_card {
+  margin-left:1em !important;
+}
+
+.cam-title {
+  display: inline !important;
+  font-size: 16px !important;
+}
+
+.cam-subtitle {
+  padding-left: 6px;
+  font-size: 13px !important;
+}
+
+.cam-header {
+  padding: 4px !important;
+}
+
+.cam-img, .nd2-card {
+  max-width: 400px !important;
+  min-height: 160px;
+}
+
+.ui-page-theme-a .ui-header {
+    background-color: #6D84A3;
+    color: #ffffff;
+}
+
+::-webkit-scrollbar { 
+  display: none; 
+}
+
+@media not all and (min-width: 700px) {
+  .main-panel:not(#panels_icons) {
+    display:none;
+  }
+  #home .secondary-panel {
+    display:none;
+  }
+}
+
+@media all and (min-width: 700px) {
+
+  .ui-mobile .ui-page-active {
+    overflow:hidden;
+  }
+
+  .secondary-panel{
+    position: absolute;
+    box-sizing:border-box;
+    border-left: #DDD 1px solid;
+    width:50%;
+    margin-left: 50%;
+    overflow-y: auto;
+  }
+
+  .main-panel {
+    padding: 1em 1em 0 1em;
+    position: absolute;
+    width: 50%;
+    overflow-y: auto;
+  }
+
+  .ui-listview:not(.ui-mini-list) .ui-li-has-thumb > img:first-child, .ui-listview:not(.ui-mini-list) .ui-li-has-thumb > .ui-btn > img:first-child {
+    left: 2em;
+  }
+
+  .ui-listview>.ui-li-has-thumb>.ui-btn, .ui-listview>.ui-li-static.ui-li-has-thumb {
+    padding-left: 7.25em;
+  }
+}
+
+#home .secondary-panel {
+  background: url('../img/home_screen.png') no-repeat center 120px/200px;
+}
+
+#box_ip_btn {
+  float: right;
+  text-transform: none !important;
+  display: none;
+  font-size: 12px;
+  box-shadow: none;
+  font-weight: 100;
+  margin-top: 8px;
+}
+
+.box-ip {
+  display: none;
+}
+
+.list_no_arrow::after
+{
+  background-image: none !important;
+}
+
+/* BEGINNING 5px smaller toolbar */
+.ui-header .ui-title
+{
+	margin: -5px 0 -5px 0;
+}
+
+.ui-header > .ui-btn
+{
+	margin: -5px 0 -5px 0;
+}
+
+.nd2Tabs li {
+	margin-top: -5px;
+}
+/* END 5px smaller toolbar */
+
+.widget_container {
+	display: table;
+	height: 58px;
+	vertical-align: middle;
+}
+
+.widget_content {
+	display: table-cell;
+	vertical-align: middle;
+	width: 1000px;
+}
+
+.widget_line_detail {
+	white-space: normal !important;
+	margin-bottom: 0 !important;
+}
+
+.ui-popup.ui-body-inherit {
+	background-color: #FFF;
+	border-color: #ccc;
+}
+
+.ui-notification
+{
+	background-image: url('../img/notification_icon.png') !important;
+	background-repeat: no-repeat;
+	background-size: 64px 64px;
+	padding-left: 88px;
+	background-position: 10px center;
+	display:flex;
+	align-items:center;
+	height: auto;
+	min-height: 64px;
+}
+
+.notification_text
+{
+  /*text-align: left;*/ /*when camera image embedded*/
+}
+
+.channel_action
+{
+	float: right;
+	margin-left: 10px;
+	margin-right: -5px;
+	position: relative;
+	z-index: 10;
+	text-align: center;
+}
+
+.ui-thumbnail-channel {
+  max-width: 32px !important;
+  max-height: 32px !important;
+  background-size: 32px 32px;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  left: 1em;
+  z-index: 10;
+	cursor: pointer;
+}
+.ui-thumbnail-channel-over {
+  z-index: 10;
+}
+
+.txt_channel {
+	font-size: 12px;
+	color: #727272 !important;
+	margin-right: -10px;
+}
+
+/*bottom margin of a listview*/
+.ui-content .ui-listview {
+	margin-bottom: 1.8em;
+}
+
+/* custom style */
+.menu-header-widget {
+  transform: translateX(-30px);
+  -webkit-transform: translateX(-30px);
+  -moz-transform: translateX(-30px);
+}
+
+/* Modification page */
+.fields,
+#modification-page .ui-select  {
+  margin-bottom: 1.8em
+}
+#cancel-btn,
+#accept-btn {
+  color: #fff;
+  width: 105px;
+}
+#cancel-btn {
+ background: #e74c3c;
+}
+#accept-btn {  
+   background: #1abc9c;  
+  display: block;
+  float: right
+}
