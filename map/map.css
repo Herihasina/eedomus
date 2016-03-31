@@ -3,6 +3,28 @@
 	padding: 0;
 	box-sizing:border-box;
 }
+.container {
+	text-align: left;
+	margin: 0 auto;
+	max-width: 1080px;
+	position: relative;
+}
 polygon{
 	cursor: pointer;
+}
+#map-wrap,
+#detail-wrap {
+	width: 49%;
+}
+#map-wrap {	
+	float: left
+}
+#detail-wrap {
+	float: right;
+}
+.detail-list {
+	padding: 0
+}
+.detail-list li {
+	list-style: none;
 }
