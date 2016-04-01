@@ -2050,25 +2050,26 @@ $(document).on('pagebeforeshow','#modification-page',function(){
 });
 
 $('#cancel-btn').on('click', function() { 
-  history.go(0);
+  $('#back-btn').click();
+  return false;
 });
 
 $('#accept-btn').on('click', function() { 
+  $('#sablier').addClass('visible');
   $.ajax({
-    url: 'config_save.php',
-        method: 'POST',
-        use_local: false,
-        dataType: 'json',
-        data: {
-            controller_module_id : temp.ID,
-            custom_name : $('#name-periph').val(),
-            room_id : $('#select-choice').val()
-        },
-        success: function(response){
-          
-        },
-        error: function(){
-          
-        }
+      url: 'config_save.php',
+      method: 'POST',
+      use_local: false,
+      dataType: 'json',
+      data: {
+          controller_module_id : temp.ID,
+          custom_name : $('#name-periph').val(),
+          room_id : $('#select-choice').val()
+      },
+      complete: function(){
+          $('#sablier').removeClass('visible');
+      },
+      success: function(response){},
+      error: function(){}
   });
 });

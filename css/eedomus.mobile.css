@@ -415,3 +415,15 @@
   display: block;
   float: right
 }
+#sablier {
+  display: none;
+  position: absolute;
+  left: 0; top: 0;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.7) url("../img/sablier.gif") no-repeat scroll center center;
+}
+#sablier.visible {
+  display: block;
+}

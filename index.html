@@ -112,19 +112,21 @@
 <div data-role="page" id="modification-page" data-title="eedomus">
   <div data-role='header' data-position="fixed">
     <h1>Modifier</h1>
-    <a href="#widgets_page" class="ui-btn ui-btn-left"><i class="zmdi zmdi-arrow-back"></i></a>
+    <a id="back-btn" href="#widgets_page" class="ui-btn ui-btn-left"><i class="zmdi zmdi-arrow-back"></i></a>
   </div>
-  <div data-role='main' class="ui-content">
-  <!-- <div class="fields"> -->
+  <div data-role='main' class="ui-content" style="position:relative">
+    <!-- animated Gif -->
+    <div id="sablier"></div>
+  
     <label for="textinput-6">Nom:</label>
     <input name="textinput-6" id="name-periph" placeholder="" value="" data-mini="true" type="text">
-  <!-- </div> -->
-  <!-- <div class="fields"> -->
+  
     <label for="select-choice" class="select">Pièces:</label>
     <select name="select-choice" id="select-choice" data-native-menu="false"></select>
-  <!-- </div>    -->
-  <button class="ui-btn ui-btn-inline" id="cancel-btn">Annuler</button>
-  <button class="ui-btn ui-btn-inline" id="accept-btn">Valider</button>
+  
+    <button class="ui-btn ui-btn-inline" id="cancel-btn">Annuler</button>
+    <button class="ui-btn ui-btn-inline" id="accept-btn">Valider</button>
+
   </div>
 </div>
 <!-- End Modification/Edit page -->
