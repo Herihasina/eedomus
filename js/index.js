@@ -2049,6 +2049,11 @@ $(document).on('pagebeforeshow','#modification-page',function(){
  });
 });
 
+$('#to-home').on('click',function(){
+  $.mobile.changePage("#home");
+  return false;
+});
+
 $('#cancel-btn').on('click', function() { 
   $('#back-btn').click();
   return false;
