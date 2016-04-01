@@ -2061,6 +2061,7 @@ $('#cancel-btn').on('click', function() {
 
 $('#accept-btn').on('click', function() { 
   $('#sablier').addClass('visible');
+  $('#modification-page').css('opacity','0.6');
   $.ajax({
       url: 'config_save.php',
       method: 'POST',
@@ -2073,6 +2074,7 @@ $('#accept-btn').on('click', function() {
       },
       complete: function(){
           $('#sablier').removeClass('visible');
+          $('#modification-page').css('opacity','1');
       },
       success: function(response){},
       error: function(){}
