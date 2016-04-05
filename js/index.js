@@ -2030,9 +2030,18 @@ $(document).on('pagebeforeshow','#modification-page',function(){
                       room_type_id : 1
                   },
                   success: function(response_room){
-                    rooms = response_room.rooms;
-                    for (var i = 0; i < rooms.length; i++) {                        
-                       var opt = new Option(rooms[i].room_label, rooms[i].room_id);                         
+                    rooms = response_room.rooms; 
+                    var tmp_label = [];
+                    var tmp_roomid = [];
+                    for (var i = 0; i < rooms.length; i++) {
+                        tmp_label.push(rooms[i].room_label);
+                        tmp_roomid.push(rooms[i].room_id);                       
+                    };
+                    tmp_label = tmp_label.sort();
+                    tmp_roomid = tmp_roomid.sort();
+
+                    for (var i = 0; i < rooms.length; i++) {                    
+                       var opt = new Option(tmp_label[i], tmp_roomid[i]);                      
                           $('#select-choice').append(opt);
                     };
                     $('#name-periph').val(nom);
