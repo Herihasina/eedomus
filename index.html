@@ -53,10 +53,10 @@
       <li data-role="list-divider"><span data-translate="true">Affichage</span></li>
       <li><a href="#home"><i class="zmdi zmdi-home"></i><span data-translate="true">Accueil</span></a></li>
       <li><a href="#notifications_page"><i class="zmdi zmdi-comment-text"></i><span data-translate="true">Notifications</span></a></li>
-      <!--<li data-role="list-divider">Configuration</li>
-      <li><a href="#terminal_parameters_page"><i class="zmdi zmdi-wrench"></i>Paramètres terminal</a></li>
-      <li><a href="#zwave_page"><i class="zmdi zmdi-portable-wifi"></i>Réseau Z-Wave</a></li>
-      <li><a href="#diag_page"><i class="zmdi zmdi-info"></i>Diagnostic</a></li>-->
+      <li data-role="list-divider">Configuration</li>
+     <!--  <li><a href="#terminal_parameters_page"><i class="zmdi zmdi-wrench"></i>Paramètres terminal</a></li>
+      <li><a href="#zwave_page"><i class="zmdi zmdi-portable-wifi"></i>Réseau Z-Wave</a></li> -->
+      <li><a href="#diag_page"><i class="zmdi zmdi-info"></i>Diagnostic</a></li>
       
       <li class="box-config" data-role="list-divider"><span data-translate="true">Box eedomus</span></li>
       <li class="box-config"><a href="/config" target="_blank"><i class="zmdi zmdi-settings"></i><span data-translate="true">Configuration réseau</span></a></li>
@@ -322,6 +322,21 @@
 
 </div>
 
+<!-- Diagnostic page -->
+<div id="diag_page" data-role="page" data-title="eedomus">
+    <div data-role="header" data-position="fixed" data-tap-toggle="false">
+      <h1 data-translate="true">Diagnostic</h1>
+      <a href="#" class="ui-btn ui-btn-left" id="to-home"><i class="zmdi zmdi-arrow-back"></i></a>
+    </div>
+    <div data-role="content" id="list-diagnostic">  
+        <ul data-role="listview">
+          <li id="network-connection" class="failed"><a href="#"><span></span>Connexion à un réseau</a></li>
+          <li id="eedomus-cloud" class="failed"><a href="#"><span></span>Accès au Cloud eedomus</a></li>
+        </ul>
+    </div>
+</div>
+<!-- End Diagnostic page -->
+
 <!-- Notification page -->
 <div data-role="page" id="notification_page">
   <!-- Notification popup  -->
@@ -349,6 +364,7 @@
 <script src="js/highcharts.js"></script>
 <script src="js/functions.js"></script>
 <script src="js/polling.js"></script>
+<script src="js/jquery.ajax-cross-origin.min.js"></script>
 <script src="js/index.js"></script>
 <script src="js/jquery.mobile.min.js"></script>
 <script src="js/nativedroid2.js"></script>

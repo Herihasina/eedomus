@@ -458,3 +458,27 @@
     from {transform:rotate(0deg);}
     to {transform:rotate(360deg);}
 }
+/* Diagnostic page */
+#list-diagnostic span {
+  position: absolute;
+  top: 0; left:0;
+  width: 45px;
+  height: 100%;
+  background:#6d84a3;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+  border-radius: 5px;
+}
+#list-diagnostic ul li a{
+  padding-left: 50px;
+}
+#list-diagnostic #network-connection.failed span,
+#list-diagnostic #eedomus-cloud.failed span {
+  background-image: url(../img/forbidden.png);
+}
+#list-diagnostic #network-connection.succeed span,
+#list-diagnostic #eedomus-cloud.succeed span
+ {
+  background-image: url(../img/check.png);
+}

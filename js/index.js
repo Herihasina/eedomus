@@ -1997,7 +1997,8 @@ $(document).on('pagebeforeshow','#widgets_page',function(){
   // if ( $('#widgets_list > li > a.ui-icon-gear').length )
   $(document).on('tap','#widgets_list > li > a.ui-icon-gear',function(){ 
     // Pass the ID
-    temp.ID = $(this).data('controller-id');
+    temp.user_widget_id = $(this).data('widget-id');
+    temp.controller_module_id = $(this).data('controller-id');
 
     $.mobile.changePage("#modification-page");
 
@@ -2010,14 +2011,23 @@ $(document).on('pagebeforeshow','#modification-page',function(){
   var rooms = {};
   $('#name-periph').val('');
   $("#select-choice").html('');
+  
+  if (widgets[temp.user_widget_id] != undefined && widgets[temp.user_widget_id].controller_wizard_id > 0)
+  {
+    json_data = { controller_wizard_id: widgets[temp.user_widget_id].controller_wizard_id };
+  }
+  else
+  {
+    json_data = { controller_module_id: temp.controller_module_id };
+  }
+
+  show_loading();
   $.ajax({
     url: 'config_select.php',
         method: 'GET',
         use_local: false,
         dataType: 'json',
-        data: {
-            controller_module_id : temp.ID
-        },
+        data: json_data,
         success: function(response){
           nom = response.custom_name;
           
@@ -2029,26 +2039,32 @@ $(document).on('pagebeforeshow','#modification-page',function(){
                   data: {
                       room_type_id : 1
                   },
-                  success: function(response_room){
+                  success: function(response_room){ 
                     rooms = response_room.rooms; 
                     var tmp_label = [];
                     var tmp_roomid = [];
                     for (var i = 0; i < rooms.length; i++) {
                         tmp_label.push(rooms[i].room_label);
-                        tmp_roomid.push(rooms[i].room_id);                       
+                        tmp_roomid.push(rooms[i].room_id);   
                     };
                     tmp_label = tmp_label.sort();
                     tmp_roomid = tmp_roomid.sort();
 
                     for (var i = 0; i < rooms.length; i++) {                    
-                       var opt = new Option(tmp_label[i], tmp_roomid[i]);                      
-                          $('#select-choice').append(opt);
+                       var opt = new Option(tmp_label[i], tmp_roomid[i]); 
+                       $('#select-choice').append(opt);                       
                     };
+
+                    $('#select-choice option[value=37176]').insertBefore( $('#select-choice option[value=1]'));
                     $('#name-periph').val(nom);
                     $("#select-choice").selectmenu("refresh");
+                    $('#select-choice-button span').text('[Invisible]');
                   },
                   error: function(){
                       
+                  },
+                  complete:function(){
+                    hide_loading();
                   }
            });
 
@@ -2069,23 +2085,62 @@ $('#cancel-btn').on('click', function() {
 });
 
 $('#accept-btn').on('click', function() { 
-  $('#sablier').addClass('visible');
+  show_loading();
   $('#modification-page').css('opacity','0.6');
+  
+  if (widgets[temp.user_widget_id] != undefined && widgets[temp.user_widget_id].controller_wizard_id > 0)
+  {
+    json_data = { controller_wizard_id: widgets[temp.user_widget_id].controller_wizard_id, custom_name: $('#name-periph').val(), room_id: $('#select-choice').val() };
+  }
+  else
+  {
+    json_data = { controller_module_id: temp.controller_module_id, custom_name: $('#name-periph').val(), room_id: $('#select-choice').val() };
+  }
+  
   $.ajax({
       url: 'config_save.php',
       method: 'POST',
       use_local: false,
       dataType: 'json',
-      data: {
-          controller_module_id : temp.ID,
-          custom_name : $('#name-periph').val(),
-          room_id : $('#select-choice').val()
-      },
+      data: json_data,
       complete: function(){
-          $('#sablier').removeClass('visible');
+          hide_loading();
           $('#modification-page').css('opacity','1');
+          //retour à la page precedente
+          $('#back-btn').click();
+          return false;
       },
       success: function(response){},
       error: function(){}
   });
 });
+
+// Diagnostic page
+
+// PhoneGap is loaded and it is now safe to make calls PhoneGap methods
+function onDeviceReady() {
+  navigator.network.isReachable("google.com", reachableCallback, {});
+}
+// Check network status
+function reachableCallback(reachability) {
+  // There is no consistency on the format of reachability
+  var networkState = reachability.code || reachability;
+  var states = {};
+  states[NetworkStatus.NOT_REACHABLE]                      = 'No network connection';
+  states[NetworkStatus.REACHABLE_VIA_CARRIER_DATA_NETWORK] = 'Carrier data connection';
+  states[NetworkStatus.REACHABLE_VIA_WIFI_NETWORK]         = 'WiFi connection';
+  if (networkState != 0) online = true;
+}
+var online = navigator.onLine || false;
+
+if(online) {
+  // make a request
+  $('#network-connection').removeClass('failed').addClass('succeed');
+  $('#eedomus-cloud').removeClass('failed').addClass('succeed');
+} else {
+  // load from localStorage
+  $('#network-connection').removeClass('succeed').addClass('failed');
+  $('#eedomus-cloud').removeClass('succeed').addClass('failed');
+}
+/********************************************************************/
+
