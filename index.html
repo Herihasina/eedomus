@@ -56,7 +56,7 @@
       <li data-role="list-divider">Configuration</li>
      <!--  <li><a href="#terminal_parameters_page"><i class="zmdi zmdi-wrench"></i>Paramètres terminal</a></li>
       <li><a href="#zwave_page"><i class="zmdi zmdi-portable-wifi"></i>Réseau Z-Wave</a></li> -->
-      <li><a href="#diag_page"><i class="zmdi zmdi-info"></i>Diagnostic</a></li>
+      <li><a href="#diag_page" id="id_diag"><i class="zmdi zmdi-info"></i>Diagnostic</a></li>
       
       <li class="box-config" data-role="list-divider"><span data-translate="true">Box eedomus</span></li>
       <li class="box-config"><a href="/config" target="_blank"><i class="zmdi zmdi-settings"></i><span data-translate="true">Configuration réseau</span></a></li>
@@ -69,11 +69,21 @@
       <li><a href="#logout"><i class="zmdi zmdi-power-off"></i><span data-translate="true">Déconnexion</span></a></li>
     </ul>
   </div>
+  <!--111111111111111111111111111111111111111111111-->
+  <div data-role="panel" data-position="right" data-display="overlay" data-position-fixed="true" data-theme="a" id="menu_favoris_acc">
+    <ul data-role="listview" data-inset="false">      
+        <li><a href="#edit_favorite_page" id=""><i class="zmdi zmdi-edit"></i>&nbsp;&nbsp;<span data-translate="true">Modifier favoris</span></a></li>
+    </ul> 
+    <strong>Favoris</strong>  
+    <div id="favoris_panel_acc">
+      
+    </div>
+  </div>
 
   <div data-role="header" data-position="fixed" data-tap-toggle="false">
     <h1 id="home_header">&nbsp;</h1>
     <a href="#nav_panel" class="ui-btn ui-btn-left"><i class="zmdi zmdi-menu"></i></a>
-    <a href="#favorite_page" class="ui-btn ui-btn-right"><i class="zmdi zmdi-star-border"></i></a>
+    <a href="#menu_favoris_acc" class="ui-btn ui-btn-right"><i class="zmdi zmdi-star-border"></i></a>
     <a href="#" class="ui-btn ui-btn-right lan-icon"></a>
   </div>
 
@@ -92,16 +102,26 @@
         <li><a href="#" id="edit-entry-btn"><i class="zmdi zmdi-edit"></i>&nbsp;&nbsp;<span data-translate="true">Modifier</span></a></li>
     </ul>
   </div>
+
+  <div data-role="panel" data-position="right" data-display="overlay" data-position-fixed="true" data-theme="a" id="menu_favoris">
+    <ul data-role="listview" data-inset="false">      
+        <li><a href="#edit_favorite_page" id="edit-entry-btn"><i class="zmdi zmdi-edit"></i>&nbsp;&nbsp;<span data-translate="true">Modifier favoris</span></a></li>
+    </ul> 
+    <strong>Favoris</strong>  
+    <div id="favoris_panel">
+      
+    </div>
+  </div>
   <!-- end inner button menu -->
 
   <div data-role="header" data-position="fixed" data-tap-toggle="false">
     <h1 id="widgets_header">&nbsp;</h1>
     <a href="#" class="ui-btn ui-btn-left" id="to-home"><i class="zmdi zmdi-arrow-back"></i></a>
-    <a href="#favorite_page" class="ui-btn ui-btn-right"><i class="zmdi zmdi-star-border"></i></a>
+    <!-- favorite_page #menu_favoris 222222222222222222222222222-->
+    <a href="#menu_favoris" class="ui-btn ui-btn-right"><i class="zmdi zmdi-star-border"></i></a>
     <a href="#menu-panel" class="ui-btn ui-btn-right menu-header-widget"><i class="zmdi zmdi-menu"></i></a>
     <a href="#" class="ui-btn ui-btn-right lan-icon"></a>
   </div>
-
   <div class="main-panel"></div>
 
   <div data-role="content" class="secondary-panel">
@@ -114,6 +134,7 @@
   <div data-role='header' data-position="fixed">
     <h1>Modifier</h1>
     <a id="back-btn" href="#widgets_page" class="ui-btn ui-btn-left"><i class="zmdi zmdi-arrow-back"></i></a>
+
   </div>
   <div data-role='main' class="ui-content" style="position:relative">
     
@@ -218,12 +239,13 @@
     <a href="#" class="ui-btn ui-btn-left" data-rel="back"><i class="zmdi zmdi-arrow-back"></i></a>
     <a href="#" class="ui-btn ui-btn-right" data-rel="back"><i class="zmdi zmdi-star"></i></a>
     <a href="#edit_favorite_page" class="ui-btn ui-btn-right ui-edit-favorite"><i class="zmdi zmdi-edit"></i></a>
-    <a href="#" class="ui-btn ui-btn-right lan-icon"></a>
+    <a href="#" class="ui-btn ui-btn-right lan-icon">+</a>
   </div>
 
   <div class="main-panel"></div>
 
   <div data-role="content" class="secondary-panel">
+    
     <ul data-role="listview" id="favorite_list"></ul>
   </div>
 
@@ -326,12 +348,14 @@
 <div id="diag_page" data-role="page" data-title="eedomus">
     <div data-role="header" data-position="fixed" data-tap-toggle="false">
       <h1 data-translate="true">Diagnostic</h1>
-      <a href="#" class="ui-btn ui-btn-left" id="to-home"><i class="zmdi zmdi-arrow-back"></i></a>
+      <a href="#" class="ui-btn ui-btn-left" id="to-home-diagnostic"><i class="zmdi zmdi-arrow-back"></i></a>
     </div>
     <div data-role="content" id="list-diagnostic">  
         <ul data-role="listview">
           <li id="network-connection" class="failed"><a href="#"><span></span>Connexion à un réseau</a></li>
           <li id="eedomus-cloud" class="failed"><a href="#"><span></span>Accès au Cloud eedomus</a></li>
+          <li id="box-cloud" class="failed"><a href="#"><span></span>Connexion cloud <span class="box_name"></span></a></li>
+          <li id="box-lan" class="failed"><a href="#"><span></span>Connexion local <span class="box_name"></span></a></li>
         </ul>
     </div>
 </div>

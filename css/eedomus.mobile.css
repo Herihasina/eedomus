@@ -458,6 +458,7 @@
     from {transform:rotate(0deg);}
     to {transform:rotate(360deg);}
 }
+
 /* Diagnostic page */
 #list-diagnostic span {
   position: absolute;
@@ -468,17 +469,89 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 #list-diagnostic ul li a{
   padding-left: 50px;
 }
+#list-diagnostic ul li{
+  margin: 10px 0px -5px 5px;
+}
 #list-diagnostic #network-connection.failed span,
-#list-diagnostic #eedomus-cloud.failed span {
+#list-diagnostic #eedomus-cloud.failed span,
+#list-diagnostic #box-cloud.failed span,
+#list-diagnostic #box-lan.failed span {
   background-image: url(../img/forbidden.png);
 }
 #list-diagnostic #network-connection.succeed span,
-#list-diagnostic #eedomus-cloud.succeed span
+#list-diagnostic #eedomus-cloud.succeed span,
+#list-diagnostic #box-cloud.succeed span,
+#list-diagnostic #box-lan.succeed span
  {
   background-image: url(../img/check.png);
+}
+
+/*favoris*/
+#favoris_panel, #favoris_panel_acc{
+  list-style: none;
+}
+
+#favoris_panel li a, #favoris_panel_acc li a{
+  padding: 5px;
+  margin-bottom: 8px;
+}
+#menu_favoris_acc,
+#menu_favoris {
+  width: 300px;
+}
+
+#favoris_panel li a img,
+#favoris_panel_acc li a img{
+  background-image: url("https://m.eedomus.com/img/btn/fond4.png");
+  position: relative;
+  float: left;
+  margin-left: -20px;
+  width: 55px;
+  background-size: 100% auto;
+}
+
+
+#favoris_panel .widget_container, 
+#favoris_panel_acc .widget_container {
+    vertical-align: middle;
+    height: auto;
+    width: 80%;
+    margin-left: 34px;
+    text-align: left;
+    display: inline-block;
+}
+#favoris_panel li div div h2, #favoris_panel_acc li div div h2{
+  text-transform:none; 
+  font-size:15px; 
+  font-weight:bold;
+  margin: 0px;
+}
+
+#favoris_panel li div div p, #favoris_panel_acc li div div p{
+  text-transform:none; 
+  color: #6D6D6D;
+  margin: 0px;
+}
+/* Place the lan-icon depending on the other icons */
+#widgets_page .ui-header > .lan-icon {
+    transform: translateX(-25px);
+    -moz-transform: translateX(-25px);
+    -webkit-transform: translateX(-25px);
+}
+#history_page .ui-header > .lan-icon {
+    transform: translateX(-25px);
+    -moz-transform: translateX(-25px);
+    -webkit-transform: translateX(-25px);
+}
+#favorite_page .ui-header > .lan-icon {
+  background-image: none;
+}
+.box_name{
+  position: relative !important;
+  background: none !important;
 }

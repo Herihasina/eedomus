@@ -631,23 +631,13 @@ function login()
   });
 }
 
-var box_name_;
-var box_id_;
-
 // Get json panels
 function get_json_panel_list()
 {
-	var temp_panel_lists = {};
-	
   show_loading();
 
   var onSuccess = function(data)
-  { 
-  	temp_panel_lists = data.controllers[0];
-
-  	box_name_ = temp_panel_lists[1];
-  	box_id_ = temp_panel_lists[0];
-
+  {
     if (data.is_connected == 0)
     {
       // Authentication failed -> Login
@@ -2249,32 +2239,25 @@ $("#id_diag").on('click',function(){
   });
 
 /********************************************************************/
-$(document).on('pagebeforeshow','#diag_page',function(){
-	$('.box_name').text('pour '+box_name_);
 
-	// send request to eedomus to verifiy connectivity to the cloud
-  $.ajax({
-    url:'controller_heartbeat.php',
-    method:'GET',
-    data:{
-    	controller_id:box_id_
-    },
-    use_local:false,
-    dataType:'json',
-    success: function(stat){
-        if (stat.status == 1){
-        	$('#box-cloud').removeClass('failed').addClass('succeed');
-        }else{
-        	$('#box-cloud').removeClass('succeed').addClass('failed');
-        }
-    },
-    error: function(){}
-  });
-
-  if ( box_lan_ip != ''){
-  		$('#box-lan').removeClass('failed').addClass('succeed');
-  }else{
-  		$('#box-lan').removeClass('succeed').addClass('failed');
-  }
-
-});
+// send request to eedomus to verify connectivity to cloud of box
+var testHH = get_json_panel_list();
+console.log( testHH );
+// $.ajax({
+//     url:'controller_heartbeat.php',
+//     data:{
+//     	controller_id:
+//     },
+//     method:'GET',
+//     use_local:false,
+//     dataType:'json',
+//     complete: function(){},
+//     success: function(cnx_status_eedomus){
+//         if(cnx_status_eedomus.status == 1){
+//           $('#eedomus-cloud').removeClass('failed').addClass('succeed');
+//         }  
+//     },
+//     error: function(){
+//         $('#eedomus-cloud').removeClass('succeed').addClass('failed');
+//     }
+//   });
