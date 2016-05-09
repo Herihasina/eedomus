@@ -1272,8 +1272,8 @@ function build_widgets(panel_id)
   }
   else
   {
-    //$('#widgets_page').data('polling-cm-list', cm_list).data('polling-time', 3000);
-    //$('#periph_page').data('polling-prev-page', 'widgets_page');
+    $('#widgets_page').data('polling-cm-list', cm_list).data('polling-time', 3000);
+    $('#periph_page').data('polling-prev-page', 'widgets_page');
   }
   Waves.attach('.secondary-panel a', ['waves-button', 'waves-float']);
   Waves.init();
@@ -2194,7 +2194,8 @@ $('#accept-btn').on('click', function() {
 });
 
 
-// Diagnostic page
+//= = = = = = = = = = = Diagnostic page
+//= = = = = = = = = = = = = = = = = = = 
 $("#id_diag").on('click',function(){ 
 
   // PhoneGap is loaded and it is now safe to make calls PhoneGap methods
@@ -2229,16 +2230,49 @@ $("#id_diag").on('click',function(){
     method:'GET',
     use_local:false,
     dataType:'json',
-    complete: function(){},
     success: function(cnx_status_eedomus){
         if(cnx_status_eedomus.status == 1){
+          $('#eedomus-cloud').removeClass('unknown');
           $('#eedomus-cloud').removeClass('failed').addClass('succeed');
         }  
     },
     error: function(){
+        $('#eedomus-cloud').removeClass('unknown');
         $('#eedomus-cloud').removeClass('succeed').addClass('failed');
     }
   });
+
+
+  // display box-cloud and box-lan
+  $('.box_name').text('pour '+box_name_);
+
+  // send request to eedomus to verifiy connectivity to the cloud
+  $.ajax({
+    url:'controller_heartbeat.php',
+    method:'GET',
+    data:{
+      controller_id:box_id_
+    },
+    use_local:false,
+    dataType:'json',
+    complete: function(){},
+    success: function(stat){
+        if (stat.status == 1){
+          $('#box-cloud').removeClass('unknown')
+          $('#box-cloud').removeClass('failed').addClass('succeed');
+        }else{
+          $('#box-cloud').removeClass('unknown');
+          $('#box-cloud').removeClass('succeed').addClass('failed');
+        }
+    },
+    error: function(){}
+  });
+
+  if ( box_lan_ip != ''){
+      $('#box-lan').removeClass('failed').addClass('succeed');
+  }else{
+      $('#box-lan').removeClass('succeed').addClass('failed');
+  }
 
 });
   
@@ -2250,31 +2284,6 @@ $("#id_diag").on('click',function(){
 
 /********************************************************************/
 $(document).on('pagebeforeshow','#diag_page',function(){
-	$('.box_name').text('pour '+box_name_);
-
-	// send request to eedomus to verifiy connectivity to the cloud
-  $.ajax({
-    url:'controller_heartbeat.php',
-    method:'GET',
-    data:{
-    	controller_id:box_id_
-    },
-    use_local:false,
-    dataType:'json',
-    success: function(stat){
-        if (stat.status == 1){
-        	$('#box-cloud').removeClass('failed').addClass('succeed');
-        }else{
-        	$('#box-cloud').removeClass('succeed').addClass('failed');
-        }
-    },
-    error: function(){}
-  });
-
-  if ( box_lan_ip != ''){
-  		$('#box-lan').removeClass('failed').addClass('succeed');
-  }else{
-  		$('#box-lan').removeClass('succeed').addClass('failed');
-  }
+	
 
 });

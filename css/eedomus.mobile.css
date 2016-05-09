@@ -477,11 +477,19 @@
 #list-diagnostic ul li{
   margin: 10px 0px -5px 5px;
 }
+#list-diagnostic #eedomus-cloud.unknown span
+{
+  background-image: url(../img/unknown.png);
+}
 #list-diagnostic #network-connection.failed span,
 #list-diagnostic #eedomus-cloud.failed span,
 #list-diagnostic #box-cloud.failed span,
 #list-diagnostic #box-lan.failed span {
   background-image: url(../img/forbidden.png);
+}
+#list-diagnostic #box-cloud.unknown span
+{
+  background-image: url(../img/unknown.png);
 }
 #list-diagnostic #network-connection.succeed span,
 #list-diagnostic #eedomus-cloud.succeed span,
