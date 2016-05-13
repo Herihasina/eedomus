@@ -1009,6 +1009,10 @@ function build_widgets(panel_id)
 
     $('#widgets_header').html(panel.name);
     //$('#widgets_page').data('panel-id', panel.panel_id);
+    if ( panel.name == 'Géolocalisation') {
+      $('.secondary-panel').append('<div id="geo_map"></div>');
+      // setTimeout(init_map(),2500);
+    }
   }
 
   periph_list.sort(function(a,b) {
@@ -2064,6 +2068,8 @@ $(document).on('pagebeforeshow','#widgets_page',function(){
 
   });
 
+
+
 });
 
 $(document).on('pagebeforeshow','#modification-page',function(){
@@ -2283,7 +2289,19 @@ $("#id_diag").on('click',function(){
   });
 
 /********************************************************************/
-$(document).on('pagebeforeshow','#diag_page',function(){
-	
-
+$('#widgets_page').on('pageload',function(){
+setInterval(function(){console.log('ok');},250);
+    
 });
+function init_map(){
+    var mapDiv = document.getElementById('geo_map');
+    var map = new google.maps.Map(mapDiv, {
+      center: {lat:-18.9236155, lng: 47.5300151},
+      zoom:15
+    });
+
+    var marker = new google.maps.Marker({
+      position: {lat:-18.9236155, lng: 47.5300151},
+      map: map
+    });
+}
