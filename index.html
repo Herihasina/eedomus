@@ -353,9 +353,9 @@
     <div data-role="content" id="list-diagnostic">  
         <ul data-role="listview">
           <li id="network-connection" class="failed"><a href="#"><span></span>Connexion à un réseau</a></li>
-          <li id="eedomus-cloud" class="failed"><a href="#"><span></span>Accès au Cloud eedomus</a></li>
-          <li id="box-cloud" class="failed"><a href="#"><span></span>Connexion cloud <span class="box_name"></span></a></li>
-          <li id="box-lan" class="failed"><a href="#"><span></span>Connexion local <span class="box_name"></span></a></li>
+          <li id="eedomus-cloud" class="unknown"><a href="#"><span></span>Accès au Cloud eedomus</a></li>
+          <li id="box-cloud" class="unknown"><a href="#"><span></span>Connexion cloud <span class="box_name"></span></a></li>
+          <li id="box-lan" class="unknown"><a href="#"><span></span>Connexion local <span class="box_name"></span></a></li>
         </ul>
     </div>
 </div>
@@ -374,6 +374,7 @@
   </div>
 </div>
 
+<script src="https://maps.googleapis.com/maps/api/js"></script>
 <script>var webapp_mode = 'phonegap';</script>
 <script src="cordova.js"></script>
 <script src="js/winstore-jscompat.js"></script>
@@ -389,6 +390,7 @@
 <script src="js/functions.js"></script>
 <script src="js/polling.js"></script>
 <script src="js/jquery.ajax-cross-origin.min.js"></script>
+
 <script src="js/index.js"></script>
 <script src="js/jquery.mobile.min.js"></script>
 <script src="js/nativedroid2.js"></script>
