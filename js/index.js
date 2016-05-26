@@ -36,6 +36,12 @@ var on_lan = false;
 var HOST = window.localStorage.getItem("HOST") || 'https://m.eedomus.com/';
 
 var favoris_elements = "";
+var id_map = 0;
+var myLat = 0;
+var myLong = 0;
+var myLat_myLong = '';
+
+var temp = {};
 
 if (webapp_mode == 'wan' && window.location.href.match(/^https:\/\/.*\.eedomus\.com/))
 {
@@ -967,6 +973,7 @@ function build_panels()
 // Build Widgets  azerty
 function build_widgets(panel_id)
 {
+      
   var periph_list = [];
   var wizard_list = [];
   var cm_list = [];
@@ -1008,11 +1015,7 @@ function build_widgets(panel_id)
     });
 
     $('#widgets_header').html(panel.name);
-    //$('#widgets_page').data('panel-id', panel.panel_id);
-    if ( panel.name == 'Géolocalisation') {
-      $('.secondary-panel').append('<div id="geo_map"></div>');
-      // setTimeout(init_map(),2500);
-    }
+    $('#widgets_page').data('panel-id', panel.panel_id);
   }
 
   periph_list.sort(function(a,b) {
@@ -1023,7 +1026,6 @@ function build_widgets(panel_id)
   list.empty();
 	
 	var hidden_channels = new Array();
-
   $.each(periph_list, function(index, controller_module_id) {
 
     var periph = periphs[controller_module_id];
@@ -1129,6 +1131,84 @@ function build_widgets(panel_id)
       since_from = since_from.replace('{0}', '<span>'+getNiceDelay(periph.last_value_change)+'</span>');
     }
 
+    
+    // geolocation and google map
+    id_map++;
+    
+
+    if(periph.module_id == 31 && panel.name == "Géolocalisation"){
+      
+      temp.controller_geo_id = periph.controller_module_id;
+      geo_pos          = periph.last_value;
+      geo_pos          = geo_pos.split(",");
+      temp.geo_pos_lat = parseFloat(geo_pos[0]);
+      temp.geo_pos_lng = parseFloat(geo_pos[1]);
+
+      
+
+      // setTimeout(function () { 
+      // This is the minimum zoom level that we'll allow
+      // var minZoomLevel = 12;
+      // var geoloc = navigator.geolocation;
+      // geoloc.getCurrentPosition(success_geoloc, failure_geoloc);
+
+      // function success_geoloc(position_geoloc){
+      //   //new google.maps.LatLng(38.50, -90.50)
+      //   myLat = position_geoloc.coords.latitude;
+      //   myLong = position_geoloc.coords.longitude;  
+      //   var mp = 'geomap'+id_map;
+      //   var map = new google.maps.Map(document.getElementById('geomap1'), {
+      //     zoom: minZoomLevel,
+      //     center: new google.maps.LatLng(myLat, myLong),
+      //     mapTypeId: google.maps.MapTypeId.ROADMAP
+      //   });
+
+      //   var map = new google.maps.Map(document.getElementById('geomap2'), {
+      //     zoom: minZoomLevel,
+      //     center: new google.maps.LatLng(myLat, myLong),
+      //     mapTypeId: google.maps.MapTypeId.ROADMAP
+      //   });
+      //   var marker = new google.maps.Marker({
+      //     map: map, 
+      //     position: new google.maps.LatLng(myLat, myLong)
+      //   });
+      // }
+
+      // function failure_geoloc(){alert("Géolocalisation failed")}
+      
+      // }, 100);
+     
+      setTimeout(function(){
+           var map = new google.maps.Map(document.getElementById('geomap1'), {
+              zoom: 12,
+              center: new google.maps.LatLng(temp.geo_pos_lat, temp.geo_pos_lng),
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+          });
+            var marker = new google.maps.Marker({
+                map: map, 
+                position: new google.maps.LatLng(temp.geo_pos_lat, temp.geo_pos_lng)
+            });
+            // $('#widget_'+parseInt(temp.controller_geo_id)).fadeOut();
+      },1);
+      // include the map in div geomap
+      var date_actuel = new Date();
+      var div_geoloc = '<li class="geoloc_card">'+ periph.custom_name +' depuis '+ getNiceDelay(periph.last_value_change) +'<div class="nd2-card">';
+      div_geoloc += '<div class="card-title has-supporting-text cam-header">';
+      div_geoloc +=   '<a href="#" data-page-to="#map-page">';
+      div_geoloc +=     '<div class="card-media geomap" id="geomap'+id_map+'"></div>';
+      div_geoloc +=     '<div style="background-color:#c0c0c0;">'+periph.custom_name+' '+periph.last_value_change+'</div>';
+      div_geoloc +=   '</a>';
+      div_geoloc += '</div></div></li>';
+
+      // list.html('').html(div_geoloc);
+      list.append(div_geoloc);
+
+
+
+      
+    }
+
+
     if (periph.module_id == 7 /* camera */|| periph.module_id == 19 /* image */)
     {
       var div = '<li class="camera_card"><div class="nd2-card">';
@@ -1216,13 +1296,12 @@ function build_widgets(panel_id)
 				/************** End of IOT channel widget test *************/
 				
 			}
-			
+
       li += addWidgetDiv(channel_div+'<h2>'+getName(periph.controller_module_id, show_utilisation, show_room)+'</h2><p class="widget_line_detail"><b>'+last_value_show+'</b> '+since_from+"</p>");
-      li += '</a></li>';
-			
+      //li += '<div id="geomap"></div>16:23 17/05/2016</a></li>';
       list.append(li);
 
-      li_favoris += addWidgetDiv(channel_div+'<h2>'+getName(periph.controller_module_id, show_utilisation, show_room)+'</h2><p class="widget_line_detail"><b>'+last_value_show+'</b> '+since_from+"</p>");
+      li_favoris += addWidgetDiv(channel_div+'<h2>'+getName(periph.controller_module_id, show_utilisation, show_room)+'</h2><p class="widget_line_detail"><b>'+last_value_show +'</b> ' + since_from+"</p>");
       li_favoris += '</a></li>';
       favoris_elements += li_favoris;
     }
@@ -2041,7 +2120,7 @@ function restart_drivers()
 	$('#nav_panel').panel('close');
 }
 
-var temp = {};
+
 
 $(document).on('pagebeforeshow','#widgets_page',function(){
   $('#widgets_list > li > a')
@@ -2289,19 +2368,78 @@ $("#id_diag").on('click',function(){
   });
 
 /********************************************************************/
-$('#widgets_page').on('pageload',function(){
-setInterval(function(){console.log('ok');},250);
-    
+
+$(document).on('pagecreate','#map-page',function(){
+    // google.maps.event.addDomListener(window, 'load', initFullMap);
+    console.log(temp);
+    setTimeout(initFullMap, 250);
 });
-function init_map(){
-    var mapDiv = document.getElementById('geo_map');
-    var map = new google.maps.Map(mapDiv, {
-      center: {lat:-18.9236155, lng: 47.5300151},
-      zoom:15
+
+$('#map-page').on('pageinit', function() {
+    $('#locate-once').on('tap',function(){
+      console.log(temp);
+
+      $.ajax({
+        url: 'direct_exec.php',
+        data:{
+            last_action: temp.geo_pos_lat +','+temp.geo_pos_lng,
+            // last_action: temp.geo_pos_lat +','+temp.geo_pos_lng,
+            controller_module_id: temp.controller_geo_id
+        },        
+        method: 'GET',
+        use_local: false,
+        dataType: 'json',
+        success:function(response){
+          console.log('youpiiii ! ' +response);
+        },
+        error:function(x,y,z){
+          console.log('textStatus :'+ y +' | ErrorThrown :' + z);
+        }
+      });
+
+      return false;
+  });
+});
+
+
+function initFullMap() {
+  var map = new google.maps.Map(document.getElementById('map-wrap'), {
+    center: {lat:temp.geo_pos_lat, lng: temp.geo_pos_lng},
+    zoom: 12
+  });
+  var marker = new google.maps.Marker({
+        map: map, 
+        position: new google.maps.LatLng(temp.geo_pos_lat, temp.geo_pos_lng)
     });
 
-    var marker = new google.maps.Marker({
-      position: {lat:-18.9236155, lng: 47.5300151},
-      map: map
-    });
+  // var infoWindow = new google.maps.InfoWindow({map: map});
+  
+  // if (navigator.geolocation) {
+  //   navigator.geolocation.getCurrentPosition(function(position) {
+  //     var pos = {
+  //       lat: position.coords.latitude,
+  //       lng: position.coords.longitude
+  //     };
+
+  //     // infoWindow.setPosition(pos);
+  //     // infoWindow.setContent('Position localisée.');
+  //     map.setCenter(pos);
+
+  //     var marker = new google.maps.Marker({
+  //         map: map, 
+  //         position: new google.maps.LatLng(pos)
+  //       });
+
+  //   }, function() {
+  //     handleLocationError(true, infoWindow, map.getCenter());
+  //   });
+  // } else {
+  //   // Browser doesn't support Geolocation
+  //   handleLocationError(false, infoWindow, map.getCenter());
+  // }
 }
+
+// function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+//   infoWindow.setPosition(pos);
+//   infoWindow.setContent(browserHasGeolocation ? 'Erreur: Position non localisée.' : 'Erreur: Votre device ne supporte pas la géolocalisation.');
+// }
