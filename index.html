@@ -69,7 +69,7 @@
       <li><a href="#logout"><i class="zmdi zmdi-power-off"></i><span data-translate="true">Déconnexion</span></a></li>
     </ul>
   </div>
-  <!--111111111111111111111111111111111111111111111-->
+  <!--edit favorite page-->
   <div data-role="panel" data-position="right" data-display="overlay" data-position-fixed="true" data-theme="a" id="menu_favoris_acc">
     <ul data-role="listview" data-inset="false">      
         <li><a href="#edit_favorite_page" id=""><i class="zmdi zmdi-edit"></i>&nbsp;&nbsp;<span data-translate="true">Modifier favoris</span></a></li>
@@ -117,7 +117,7 @@
   <div data-role="header" data-position="fixed" data-tap-toggle="false">
     <h1 id="widgets_header">&nbsp;</h1>
     <a href="#" class="ui-btn ui-btn-left" id="to-home"><i class="zmdi zmdi-arrow-back"></i></a>
-    <!-- favorite_page #menu_favoris 222222222222222222222222222-->
+    <!-- favorite_page #menu_favoris 222222-->
     <a href="#menu_favoris" class="ui-btn ui-btn-right"><i class="zmdi zmdi-star-border"></i></a>
     <a href="#menu-panel" class="ui-btn ui-btn-right menu-header-widget"><i class="zmdi zmdi-menu"></i></a>
     <a href="#" class="ui-btn ui-btn-right lan-icon"></a>
@@ -370,12 +370,13 @@
     <div data-role="content">
         <div id="map-wrap" style="width:100%;height:350px"></div>
         <a href="#" id="locate-once" class="ui-btn ui-btn-inline">Localiser</a>
-        <a href="#interval" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline">Localiser X</a>
+        <a href="#interval" id="follow"data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline">Suivre</a>
+        <a href="#" id="not_follow"data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline">Ne pas suivre</a>
         <div data-role="popup" id="interval" class="ui-corner-all" >
            <p>Fréquence : (minutes)</p>
-           <input type="text" id="freq" class="ui-btn-inline"/>
-           <p>Durée : (heures)</p>
-           <input type="text" id="duree" class="ui-btn-inline"/>
+           <input type="number" step="1" min="1" max="60" id="freq" class="ui-btn-inline" value="1" />
+           <p>Durée : (minutes)</p>
+           <input type="number" step="5" min="0" max="60" id="duree" class="ui-btn-inline" value="60" />
            <a href="#" id="locate-more" class="ui-btn ui-btn-inline">Valider</a>
         </div>
     </div>

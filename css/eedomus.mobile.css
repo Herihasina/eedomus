@@ -568,7 +568,11 @@
   overflow: hidden;
   position: static;
 }
-/* hide for geolocalisation widget */
-#widget_359474 {
- display: none;
+
+#interval{
+  padding: 5px;
+}
+
+#not_follow{
+  display: none;
 }
