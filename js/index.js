@@ -1135,18 +1135,15 @@ function build_widgets(panel_id)
     }
 
     
-    // geolocation and google map
-   
+    // geolocation and google map   
     if(periph.module_id == 31 && panel.name == "Géolocalisation"){
       indice_map++;
       var id_geomap = 'geomap'+indice_map;
-
       temp.controller_geo_id = periph.controller_module_id;
       geo_pos          = periph.last_value;
       geo_pos          = geo_pos.split(",");
       temp.geo_pos_lat = parseFloat(geo_pos[0]);
       temp.geo_pos_lng = parseFloat(geo_pos[1]);
-
      
       setTimeout(function(){
         var add_map = 1;
@@ -1183,8 +1180,6 @@ function build_widgets(panel_id)
       div_geoloc += '</div></div></li>';
 
       list.append(div_geoloc);
-
-
     }
 
 
@@ -2355,7 +2350,6 @@ $("#id_diag").on('click',function(){
     return false;
   });
 
-
 //= = = = = = = = = = = Map et géolocalisation
 //= = = = = = = = = = = = = = = = = = = = = = = =
 $(document).on('pagecreate','#map-page',function(){
@@ -2501,4 +2495,3 @@ function full_map() {
   }
 
 }
-
