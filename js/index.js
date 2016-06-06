@@ -2390,12 +2390,44 @@ $('#map-page').on('pageinit', function() {
         use_local: false,
         dataType: 'json',
         success:function(response){
-          console.log('youpiiii ! ' +response);
+          console.log('success ! ' +response);
         },
         error:function(x,y,z){
           console.log('textStatus :'+ y +' | ErrorThrown :' + z);
         }
       });
+
+      return false;
+  });
+
+    $('#locate-more').on('tap',function(){
+      console.log('there');
+      var startTime = new Date().getTime();
+      
+
+      var interval = setInterval(function(){
+         $.ajax({
+              url: 'direct_exec.php',
+              data:{
+                  last_action: temp.geo_pos_lat +','+temp.geo_pos_lng,
+                  controller_module_id: temp.controller_geo_id
+              },        
+              method: 'GET',
+              use_local: false,
+              dataType: 'json',
+              success:function(response){
+                console.log('success ! ' +response);
+              },
+              error:function(x,y,z){
+                console.log('textStatus :'+ y +' | ErrorThrown :' + z);
+              }
+            });
+           if(new Date().getTime() - startTime > $('#duree').val()*60*60 ){
+              clearInterval(interval);
+              return;
+          }
+      }, $('#freq').val()*60*1000);
+      
 
       return false;
   });

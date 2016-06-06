@@ -370,6 +370,14 @@
     <div data-role="content">
         <div id="map-wrap" style="width:100%;height:350px"></div>
         <a href="#" id="locate-once" class="ui-btn ui-btn-inline">Localiser</a>
+        <a href="#interval" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline">Localiser X</a>
+        <div data-role="popup" id="interval" class="ui-corner-all" >
+           <p>Fréquence : (minutes)</p>
+           <input type="text" id="freq" class="ui-btn-inline"/>
+           <p>Durée : (heures)</p>
+           <input type="text" id="duree" class="ui-btn-inline"/>
+           <a href="#" id="locate-more" class="ui-btn ui-btn-inline">Valider</a>
+        </div>
     </div>
 </div>
 <!-- End Full map page -->
