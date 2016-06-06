@@ -91,7 +91,7 @@
   border-radius: 10px;
 }
 
-.ui-content .ui-listview li.camera_card {
+.ui-content .ui-listview li.camera_card, .ui-content .ui-listview li.geoloc_card {
   margin: -1.5em 1em;
   height: auto;
 }
@@ -203,7 +203,7 @@
   font-weight: 500;
 }
 
-.camera_card {
+.camera_card, .geoloc_card {
   margin-left:1em !important;
 }
 
@@ -563,7 +563,16 @@
   position: relative !important;
   background: none !important;
 }
-#geo_map {
-  width: 100%;
-  height: 250px;
+.geomap {
+  height: 200px;
+  overflow: hidden;
+  position: static;
+}
+
+#interval{
+  padding: 5px;
+}
+
+#not_follow{
+  display: none;
 }
