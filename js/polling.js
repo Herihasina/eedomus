@@ -100,8 +100,16 @@ var polling = {
 
       if (periph != null)
       {
+        var brut_coords = data[i].toString();
+        brut_coords = brut_coords.split(',');
+        var j = i - 1;
+        $('#lat-minigeomap'+ j).val( brut_coords[1] );
+        $('#lng-minigeomap'+ j).val( brut_coords[2] );
+
         if (value[4] != '' && value[4] != 0)
         {
+
+
           // Check if we have to update macro
           update_macro(controller_module_id, value[4], value[7]);
           $('span[data-macro-id="'+value[4]+'"]').html(value[7]);
