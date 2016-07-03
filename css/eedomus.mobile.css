@@ -576,3 +576,7 @@
 #not_follow{
   display: none;
 }
+
+.moncompte_user, .moncompte_account_type, .moncompte_expiration{
+  margin: 0px 0px 10px 0px;
+}

@@ -56,7 +56,9 @@
       <li data-role="list-divider">Configuration</li>
      <!--  <li><a href="#terminal_parameters_page"><i class="zmdi zmdi-wrench"></i>Paramètres terminal</a></li>
       <li><a href="#zwave_page"><i class="zmdi zmdi-portable-wifi"></i>Réseau Z-Wave</a></li> -->
+      <li><a href="#moncompte_page" id="id_moncompte"><i class="ui-icon-tag ui-btn-icon-left" style="margin-right:-10px;"></i>Mon compte</a></li>
       <li><a href="#diag_page" id="id_diag"><i class="zmdi zmdi-info"></i>Diagnostic</a></li>
+      <li><a href="#reseau_zwave_page" id="id_reseau_zwave"><i class="zmdi zmdi-plus-circle-o"></i>Réseau Z-Wave</a></li>
       
       <li class="box-config" data-role="list-divider"><span data-translate="true">Box eedomus</span></li>
       <li class="box-config"><a href="/config" target="_blank"><i class="zmdi zmdi-settings"></i><span data-translate="true">Configuration réseau</span></a></li>
@@ -344,6 +346,23 @@
 
 </div>
 
+<!-- moncompte page -->
+<div id="moncompte_page" data-role="page" data-title="eedomus">
+    <div data-role="header" data-position="fixed" data-tap-toggle="false">
+      <h1 data-translate="true">Mon compte</h1>
+      <a href="#" class="ui-btn ui-btn-left" id="to-home-moncompte"><i class="zmdi zmdi-arrow-back"></i></a>
+    </div>
+    <div data-role="content" id="list-moncompte">  
+        <div><b>Utilisateur: </b></div>
+        <div id="id_user" class="moncompte_user">...&nbsp;</div>
+        <div><b>Type de compte: </b></div>
+        <div id="id_account_type" class="moncompte_account_type">...&nbsp;</div>
+        <div><b>Expiration du service premium: </b></div>
+        <div id="id_expiration" class="moncompte_expiration">...&nbsp;</div>
+    </div>
+</div>
+<!-- End moncompte page -->
+
 <!-- Diagnostic page -->
 <div id="diag_page" data-role="page" data-title="eedomus">
     <div data-role="header" data-position="fixed" data-tap-toggle="false">
@@ -368,10 +387,10 @@
         <a href="#" class="ui-btn ui-btn-left" data-rel="back"><i class="zmdi zmdi-arrow-back"></i></a>
     </div>
     <div data-role="content">
-        <div id="map-wrap" style="width:100%;height:350px"></div>
+        <div id="map-wrap" style="width:100%;height:350px; margin-bottom: 5px; min-height:75vh;"></div>
         <a href="#" id="locate-once" class="ui-btn ui-btn-inline">Localiser</a>
         <a href="#interval" id="follow"data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline">Suivre</a>
-        <a href="#" id="not_follow"data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline">Ne pas suivre</a>
+        <a href="#" id="not_follow"data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline">Ne plus suivre</a>
         <div data-role="popup" id="interval" class="ui-corner-all" >
            <p>Fréquence : (minutes)</p>
            <input type="number" step="1" min="1" max="60" id="freq" class="ui-btn-inline" value="1" />
@@ -395,7 +414,9 @@
     <span class="nd2-toast-message"></span>
   </div>
 </div>
-
+<script type="text/javascript">
+    window.glob_lat, window.glob_lng; 
+</script>
 <script src="https://maps.googleapis.com/maps/api/js"></script>
 <script>var webapp_mode = 'phonegap';</script>
 <script src="cordova.js"></script>
