@@ -2492,7 +2492,6 @@ $(document).on('pagebeforeshow','#map-page', function() {
 });
 
 
-
 function full_map(latitude,longitude, send_location) 
 {
     
@@ -2598,3 +2597,4 @@ $('#to-home-moncompte').on('click',function(){
     $.mobile.changePage("#home");
     return false;
   });
+
