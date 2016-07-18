@@ -55,10 +55,10 @@
       <li><a href="#notifications_page"><i class="zmdi zmdi-comment-text"></i><span data-translate="true">Notifications</span></a></li>
       <li data-role="list-divider">Configuration</li>
      <!--  <li><a href="#terminal_parameters_page"><i class="zmdi zmdi-wrench"></i>Paramètres terminal</a></li>
-      <li><a href="#zwave_page"><i class="zmdi zmdi-portable-wifi"></i>Réseau Z-Wave</a></li> -->
-      <li><a href="#moncompte_page" id="id_moncompte"><i class="ui-icon-tag ui-btn-icon-left" style="margin-right:-10px;"></i>Mon compte</a></li>
+      <li><a href="#zwave_page"><i class="zmdi zmdi-portable-wifi"></i>Réseau Z-Wave</a></li> zmdi-leak -->
+      <li><a href="#moncompte_page" id="id_moncompte"><i class="zmdi zmdi-account"></i>Mon compte</a></li>
       <li><a href="#diag_page" id="id_diag"><i class="zmdi zmdi-info"></i>Diagnostic</a></li>
-      <li><a href="#reseau_zwave_page" id="id_reseau_zwave"><i class="zmdi zmdi-plus-circle-o"></i>Réseau Z-Wave</a></li>
+      <li><a href="#zwave_page" id="id_reseau_zwave"><i class="zmdi zmdi-portable-wifi"></i>Réseau Z-Wave</a></li>
       
       <li class="box-config" data-role="list-divider"><span data-translate="true">Box eedomus</span></li>
       <li class="box-config"><a href="/config" target="_blank"><i class="zmdi zmdi-settings"></i><span data-translate="true">Configuration réseau</span></a></li>
@@ -67,7 +67,7 @@
       
       <li data-role="list-divider"><span data-translate="true">eedomus</span></li>
       <li><a href="#refresh"><i class="zmdi zmdi-refresh"></i><span data-translate="true">Synchroniser</span></a></li>
-      <li><a href="#users_page"><i class="zmdi zmdi-account"></i><span data-translate="true">Changer d'utilisateur</span></a></li>
+      <li><a href="#users_page"><i class="zmdi zmdi-accounts"></i><span data-translate="true">Changer d'utilisateur</span></a></li>
       <li><a href="#logout"><i class="zmdi zmdi-power-off"></i><span data-translate="true">Déconnexion</span></a></li>
     </ul>
   </div>
@@ -233,6 +233,39 @@
 
 </div>
 
+
+<!-- video page -->
+<div data-role="page" id="video_page" data-title="eedomus">
+
+  <div data-role="header" data-position="fixed" data-tap-toggle="false">
+    <h1 id="video_header" data-translate="true">&nbsp;</h1>
+    <a href="#" class="ui-btn ui-btn-left" data-rel="back"><i class="zmdi zmdi-arrow-back"></i></a>
+  </div>
+
+  <div data-role="content">  
+    <p id="video_read">
+      &nbsp;
+    </p>
+
+    <p style="text-align:center">
+      <!--a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="chose_date" href="#">Choisir une date</a-->
+      <a href="#popup_date" id="chose_date" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline">
+        Choisir une date
+      </a>
+      <a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="generate" href="#">Générer</a>
+
+      <div data-role="popup" id="popup_date" class="ui-corner-all">
+        <p>Date: </p>
+        <input type="date" id="my_date" class="ui-btn-inline" placeholder="aaaa-mm-jj" value=""/>
+
+        <a href="#" id="valide_date" class="ui-btn ui-btn-inline">Valider</a>
+      </div>
+    </p>
+  </div>
+
+</div>
+<!-- end video page -->
+
 <!-- Favorite page  -->
 <div data-role="page" id="favorite_page" data-widget-id="" data-title="eedomus">
 
@@ -363,7 +396,7 @@
 </div>
 <!-- End moncompte page -->
 
-<!-- Diagnostic page -->
+<!-- Diagnostic page --> 
 <div id="diag_page" data-role="page" data-title="eedomus">
     <div data-role="header" data-position="fixed" data-tap-toggle="false">
       <h1 data-translate="true">Diagnostic</h1>
@@ -379,6 +412,74 @@
     </div>
 </div>
 <!-- End Diagnostic page -->
+
+<!-- zwave page page -->
+<div id="zwave_page" data-role="page" data-title="eedomus">
+    <div data-role="header" data-position="fixed" data-tap-toggle="false">
+      <h1 data-translate="true">Réseau Z-Wave</h1>
+      <a href="#" class="ui-btn ui-btn-left" id="to-home-zwave"><i class="zmdi zmdi-arrow-back"></i></a>
+    </div>
+    <div data-role="content" id="list-zwave">  
+      <ul data-role="listview" id="ul-zwave">
+        <li class="inclusion_zwave unknown"><a href="#"><span></span><span class="box_name">...</span></a></li>
+        <li class="exclusion_zwave unknown"><a href="#"><span></span><span class="box_name">...</span></a></li>
+      </ul>
+        
+    </div>
+</div>
+<!-- End zwave page -->
+
+<!-- inclusion zwave page page -->
+<div id="inclusion_zwave_page" data-role="page" data-title="eedomus">
+    <div data-role="header" data-position="fixed" data-tap-toggle="false">
+      <h1 data-translate="true">Inclusion Z-Wave</h1>
+      <a href="#" class="ui-btn ui-btn-left" id="to-home-inclusion-zwave"><i class="zmdi zmdi-arrow-back"></i></a>
+    </div>
+    <div data-role="content" id="" class="black-bg">       
+      <p style="text-align:center">
+          Inclusion Z-Wave <span id="include_id_box"></span>
+      </p>
+      <div id="content-inclusion-zwave">
+        <!-- <p>
+          Avant de commancer:
+          <br>
+          - Regardez la notice de votre péripherique pour comprendre le fonctionnement de son boutton d'inclusion (simple clic, triple clic, appui long ...)
+          <br>
+          - Si inclus auparavant, veuillez vous assurer que votre péripherique a été préalablement exclu.
+        </p> -->
+      </div> 
+      
+    <p style="text-align:center">
+      <a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="inclusion-launch" href="#">Démarrer l' Inclusion Z-Wave</a>
+      <a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="inclusion-cancel" href="#">Annuler</a>
+    </p>
+    </div>
+</div>
+<!-- End inclusion zwave page -->
+
+<!-- exclusion zwave page page -->
+<div id="exclusion_zwave_page" data-role="page" data-title="eedomus">
+    <div data-role="header" data-position="fixed" data-tap-toggle="false">
+      <h1 data-translate="true">Exclusion Z-Wave</h1>
+      <a href="#" class="ui-btn ui-btn-left" id="to-home-exclusion-zwave"><i class="zmdi zmdi-arrow-back"></i></a>
+    </div>
+    <div data-role="content" id="" class="black-bg">       
+      <p style="text-align:center">
+          Exclusion Z-Wave <span id="exclude_id_box"></span>
+      </p>
+      <div id="content-exclusion-zwave">
+        <p>
+         Vous êtes sur le point d'exclure votre périphérique.
+        </p>
+      </div> 
+      
+    <p style="text-align:center">
+      <a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="exclusion-launch" href="#">Démarrer l' Exclusion Z-Wave</a>
+      <a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="to-home-excl" href="#">Annuler</a>
+    </p>
+    </div>
+</div>
+<!-- End exclusion zwave page -->
 
 <!-- Full map page -->
 <div id="map-page" data-role="page" data-title="eedomus">
@@ -437,16 +538,6 @@
 <script src="js/index.js"></script>
 <script src="js/jquery.mobile.min.js"></script>
 <script src="js/nativedroid2.js"></script>
-<script type="text/javascript">
-  /*var geoloc = navigator.geolocation;
-  navigator.geolocation.getCurrentPosition(success_geoloc, failure_geoloc);
 
-  function success_geoloc(position){
-    var myLat = position.coords.latitude;
-    var myLong = position.coords.longitude;
-    alert("true");
-  } 
-  function failure_geoloc(){alert("Géolocalisation failed")}*/
-</script>
 </body>
 </html>

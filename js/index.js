@@ -41,6 +41,7 @@ var id_map = 0;
 var latitude = 0;
 var longitude = 0;
 var length_card;
+var id_camera = 0;
 
 var state_locate_more = false;
 var startTime = new Date().getTime();
@@ -382,22 +383,33 @@ function init()
       return false;
     }
 
-    if (toPage == "#history_page")
+
+
+    if (toPage == "#history_page" || toPage == "#video_page") // vidéo
     {
       var filter_mvt = $(this).data('filter-mvt');
       if (typeof filter_mvt != 'undefined')
       {
-        $('ul[data-role="nd2tabs"]').hide();
-        build_history(controller_module_id, filter_mvt);
+        if (filter_mvt == 2)
+        {
+          id_camera = $(this).data('controller-id');
+          build_history(controller_module_id, filter_mvt);
+        }
+        else
+        {
+          $('ul[data-role="nd2tabs"]').hide();
+          build_history(controller_module_id, filter_mvt);
+        }
       }
       else
       {
+        
         $('ul[data-role="nd2tabs"]').show();
         build_graph(controller_module_id);
       }
     }
     else
-    {
+    { 
       if ($(this).data('action') == 'macro')
       {
         doMacro($(this).data('module-id'), $(this).data('macro-id'));
@@ -875,7 +887,7 @@ function register_push_notifications()
 					// in app notifications sounds must be handled here
 					var path = window.location.pathname;
 					path = path.substr(path, path.length - 10);
-					var sound = 'file://' + path + 'sounds/eedomuspush.mp3';
+					var sound = 'file://' + path + 'audio/eedomuspush.mp3';
 			
 					//alert("Debug : trying to play "+sound);
 					var audio = new Audio(sound);
@@ -1143,9 +1155,11 @@ function build_widgets(panel_id)
 
     
     // geolocation and google map
-      temp.controller_geo_id = periph.controller_module_id;
+    temp.controller_geo_id = periph.controller_module_id;
 
-      geo_pos          = periph.last_value;
+    geo_pos          = periph.last_value;
+       
+    if(periph.module_id == 31){
       geo_pos          = geo_pos.split(",");       
       temp.geo_pos_lat = parseFloat(geo_pos[0]); 
       temp.geo_pos_lng = parseFloat(geo_pos[1]);
@@ -1153,8 +1167,7 @@ function build_widgets(panel_id)
       conts.push(temp.controller_geo_id);
       lats.push(temp.geo_pos_lat);
       longs.push(temp.geo_pos_lng);
-      
-    if(periph.module_id == 31){
+
       var id = indice_map;
       var div_geoloc = '<li class="geoloc_card" > <div class="nd2-card">';
       div_geoloc += '<div class="card-title has-supporting-text cam-header">';
@@ -1181,7 +1194,9 @@ function build_widgets(panel_id)
       div += '<h5 class="card-subtitle cam-title cam-subtitle">'+since_from+'</h5>';
       div += '</div>';
 
-      div += '<div class="card-media"><a href="#" data-page-to="#periph_page" data-controller-id="'+periph.controller_module_id+'"><img id="cam_img'+periph.controller_module_id+'" class="card-avatar cam-img" src="'+last_value_show+'" cam_url='+cam_url+'></a>';
+      div += '<div class="card-media">';
+      div +=     '<a href="#" data-page-to="#periph_page" data-controller-id="'+periph.controller_module_id+'"><img id="cam_img'+periph.controller_module_id+'" class="card-avatar cam-img" src="'+last_value_show+'" cam_url='+cam_url+'>';
+      div +=     '</a>';
       //div += '<div class="card-action">';
       //div += '<a href="#" class="ui-btn ui-btn-inline">'+_('Direct')+'</a>';
       //div += '<a href="#history_page" data-filter-mvt="1" data-controller-id="'+periph.controller_module_id+'" class="ui-btn ui-btn-inline">'+_('Historique des mouvements')+'</a>';
@@ -1375,7 +1390,7 @@ function build_widgets(panel_id)
   } 
 }
 
-//////////////////////-------///////////////////
+
 
 function getCamUrl(controller_module_id)
 {
@@ -1442,8 +1457,9 @@ function build_periph(controller_module_id)
 
       div += '<div class="card-media"><img id="direct_cam" class="card-avatar" src="'+cam_image+'" cam_url="'+cam_url+'"></a>';
       div += '<div class="card-action">';
-      div += '<a href="#history_page" data-filter-mvt="1" data-controller-id="'+periph.controller_module_id+'" class="ui-btn ui-btn-inline">'+_('Historique des mouvements')+'</a>';
-      div += '<a href="#history_page" data-filter-mvt="0" data-controller-id="'+periph.controller_module_id+'" class="ui-btn ui-btn-inline">'+_('Historique complet')+'</a>';
+      div +=    '<a href="#video_page" data-filter-mvt="2" data-controller-id="'+periph.controller_module_id+'" id="camera_'+periph.controller_module_id+'" class="ui-btn ui-btn-inline">Vidéo</a>';
+      div +=    '<a href="#history_page" data-filter-mvt="1" data-controller-id="'+periph.controller_module_id+'" class="ui-btn ui-btn-inline">'+_('Historique des mouvements')+'</a>';
+      div +=    '<a href="#history_page" data-filter-mvt="0" data-controller-id="'+periph.controller_module_id+'" class="ui-btn ui-btn-inline">'+_('Historique complet')+'</a>';
       div += '</div>';
       div += '</div></div></li>';
       $('#periph_list').append(div);
@@ -1663,7 +1679,7 @@ function build_graph(controller_module_id, tab, polling)
 
 // Build History
 function build_history (controller_module_id, filter_mvt, polling)
-{
+{ 
   $("[data-role='nd2tabs']").tabs('switchTabWithoutTransition', $("li[data-tab='history']"), 'history', 0);
 
   var list = $('#history_list');
@@ -1698,7 +1714,9 @@ function build_history (controller_module_id, filter_mvt, polling)
     }
     title = getName(periph.controller_module_id, true)+' ('+title+')';
 
-    $('#history_header').html(title);
+    $('#history_header').html(title); 
+    $('#video_header').html(title);
+    
   }
 
   show_loading();
@@ -2492,6 +2510,7 @@ $(document).on('pagebeforeshow','#map-page', function() {
 });
 
 
+
 function full_map(latitude,longitude, send_location) 
 {
     
@@ -2568,8 +2587,7 @@ function failure_loc(){
 // ----- end send my location
 
 
-//= = = = = = = = = = = mon compte 
-//= = = = = = = = = = = = = = = = = = =  $("#id_diag").on('click',function(){ 
+//= = = = = = = = = = = mon compte  
 $("#id_moncompte").on('click',function(){
   $.ajax({
       url: '/json/account_info.php',
@@ -2598,3 +2616,365 @@ $('#to-home-moncompte').on('click',function(){
     return false;
   });
 
+
+//= = = = = = = = = = = zwave 
+$(document).on('pagebeforeshow','#zwave_page', function() {
+  show_loading();
+  var nom_box = "";  
+  var exclusion = "";
+  var cont_id;
+  var class_zwave = "waves-effect .waves-circle ui-btn ui-btn-icon-right ui-icon-carat-r";
+  $("#ul-zwave" ).empty();
+  $.ajax({
+    url: 'json_panel_list.php',
+    use_local: true,
+    complete: function(){
+      hide_loading();
+    },
+    success: function(data){
+      var i = 0;
+      $.each(data.controllers, function(index, controller){       
+        
+        // include just the real device : controller[4] == 1
+        if ( controller[4] == 1 ) {
+            var id_inclu = 'id'+i;
+            nom_box = controller[1].replace('[','');
+            nom_box = nom_box.replace(']','');
+            cont_id = controller[0];
+
+            var inclusion = "";
+            inclusion += '<li class="inclusion_zwave succeed incl">';
+            inclusion +=    '<a href="#inclusion_zwave_page" id="'+id_inclu+'" class ="'+ class_zwave +'" data-cont_id="'+ cont_id +'" data-nom_box="'+ nom_box +'"><span></span>';
+            inclusion +=        '<span class="box_name">Inclusion Z-Wave '+ nom_box +'</span>';
+            inclusion +=    '</a>';
+            inclusion += '</li>';
+            $("#ul-zwave" ).append(inclusion);
+
+            var exinclusion = "";
+            exinclusion += '<li class="inclusion_zwave failed excl">';
+            exinclusion +=    '<a href="#exclusion_zwave_page" class ="'+ class_zwave +'" data-cont_id="'+ cont_id +'" data-nom_box="'+ nom_box +'"><span></span>';
+            exinclusion +=        '<span class="box_name">Exclusion Z-Wave '+ nom_box +'</span>';
+            exinclusion +=    '</a>';
+            exinclusion += '</li>';
+            $("#ul-zwave" ).append(exinclusion);
+        }
+        
+        i++;
+      });
+  }
+});
+
+$(document).on('tap','.incl a',function(){
+  window.localStorage.include_nom_box = $(this).data('nom_box');
+  window.localStorage.include_id_box = $(this).data('cont_id');
+  return;
+});
+
+$(document).on('tap','.excl a',function(){
+  window.localStorage.exclude_nom_box = $(this).data('nom_box');
+  window.localStorage.exclude_id_box = $(this).data('cont_id');
+  return;
+});
+ 
+});
+
+$('#to-home-zwave').on('click',function(){
+    $.mobile.changePage("#home");
+    return false;
+});
+
+//
+$('#to-home-inclusion-zwave, #to-home-exclusion-zwave').on('click',function(){
+    $.mobile.changePage("#zwave_page");
+    return false;
+});
+
+
+$(document).on('pagebeforeshow','#inclusion_zwave_page',function(){
+    $('#include_id_box').html(localStorage.include_nom_box);
+    $('#content-inclusion-zwave').html(
+        '<p>'+
+          'Avant de commancer:'+
+          '<br>'+
+          '- Regardez la notice de votre péripherique pour comprendre le fonctionnement de son boutton d\'inclusion (simple clic, triple clic, appui long ...)'+
+          '<br>'+
+         ' - Si inclus auparavant, veuillez vous assurer que votre péripherique a été préalablement exclu.'+
+        '</p>');
+    var interval_incl;
+    
+    $(document).on('tap','#inclusion-launch',function(e){
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      var bip = 0;
+      show_loading();
+      $('#inclusion-launch').fadeOut();
+      $('#inclusion-cancel').fadeIn();      
+
+      $.ajax({
+        url:'add_wireless.php',
+        data:{
+          // app : 'pg',
+          mobile : '1',
+          new_controller_id : localStorage.include_id_box,
+          wireless_mode : 'add'
+        },
+        use_local:0,
+        success: function(data){
+
+                hide_loading();
+
+                interval_incl = setInterval(function(){
+                  
+                  $.ajax({
+                    url:'add_wireless_poll.php',
+                    data:{
+                      // app : 'pg',
+                      mobile : '1',
+                      new_controller_id : localStorage.include_id_box,
+                    },
+                    use_local:0,
+                    success: function(data1){                      
+                      if (data1[0][0] == 5 || data1[0][0] == 16 || data1[0][0] == 4 || data1[0][0] == 6){ //Délai d'attente atteinte
+                          $('#content-inclusion-zwave').html( data1[0][1] );
+                          clearInterval(interval_incl);          
+                          $('#inclusion-launch').fadeIn();
+                          $('#inclusion-cancel').fadeOut();
+                      }else{
+                          var old_html = $('#content-inclusion-zwave').html();
+                          var new_html = data1[0][1];
+                          if ( old_html != new_html ){
+                            $('#content-inclusion-zwave').html( new_html );
+                          }
+                          // var patt = /.*?(<\/audio>).*?$/;
+                          // var res = patt.test( old_html );
+                          // if ( res ){
+                          //     bip++;
+                          //     if (bip == 1){
+                          //         $('#content-inclusion-zwave').html( data1[0][1] );
+                          //     }else{
+                          //         $('#content-inclusion-zwave audio').remove();
+                          //     }
+                              
+                          // }else{
+                          //     $('#content-inclusion-zwave').html( data1[0][1] ); 
+                          // }                                            
+
+                      }
+                      
+                    },
+                    error: function(x,y,z){
+                        console.log("textStatus : "+ y +" ErrorThrown : "+ z);
+                    }
+                  });
+
+                },3000);
+            
+
+        }, //success add_wireless
+        error: function(x,y,z){
+          console.log("textStatus : "+ y +" ErrorThrown : "+ z);
+        }
+      });
+
+      return false;
+    }); //launch inclusion
+
+    $(document).on('tap','#inclusion-cancel',function(e){
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      $.ajax({
+        url:'new/radio_detect_cancel.php',
+        data:{
+          new_controller_id: localStorage.include_id_box
+        },
+        use_local: 0,
+        complete: function(){
+          clearInterval(interval_incl);          
+           $('#inclusion-launch').fadeIn();
+          $('#inclusion-cancel').fadeOut();
+            setTimeout(function(){
+                $.mobile.changePage("#zwave_page");
+            },4000);
+          
+        },
+        success: function(data2){           
+          console.log(data2);          
+        },
+        error: function(x,y,z){
+            console.log("textStatus : "+ y +" ErrorThrown : "+ z);
+        }
+      });
+      return false;
+    }); //cancel inclusion
+
+    $('')
+});
+
+$(document).on('pagebeforeshow','#exclusion_zwave_page',function(){
+    var excl_int;
+
+    $('#exclude_id_box').html(localStorage.exclude_nom_box);
+
+    $(document).on('tap','#exclusion-launch',function(e){
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      $.ajax({
+        url:'add_wireless.php',
+        data:{
+          // app : 'pg',
+          mobile : '1',
+          new_controller_id : localStorage.exclude_id_box,
+          wireless_mode : 'del'
+        },
+        use_local:0,
+        success: function(data){
+          $('#exclusion-launch').fadeOut();
+          $('#to-home-excl').fadeIn();
+
+              excl_int = setInterval(function(){
+              $.ajax({
+                url:'add_wireless_poll.php',
+                data:{
+                  // app : 'pg',
+                  mobile : '1',
+                  new_controller_id : localStorage.exclude_id_box,
+                },
+                use_local:0,
+                success: function(data1){
+                  if (data1[0][0] == 5 || data1[0][0] == 16 || data1[0][0] == 4 || data1[0][0] == 6){ //Délai d'attente atteinte
+                      $('#content-exclusion-zwave').html( data1[0][1] );
+                      clearInterval(excl_int);          
+                      $('#exclusion-launch').fadeIn();
+                      $('#to-home-excl').fadeOut();
+                  }else{
+                      var old_html = $('#content-inclusion-zwave').html();
+                      var new_html = data1[0][1];
+                      if ( old_html != new_html ){
+                        $('#content-inclusion-zwave').html( new_html );
+                      }
+                  }
+                  
+                },
+                error: function(x,y,z){
+                    console.log("textStatus : "+ y +" ErrorThrown : "+ z);
+                }
+              });
+            },3000);        
+
+        },
+        error: function(x,y,z){
+            console.log("textStatus : "+ y +" ErrorThrown : "+ z);
+        }
+      });
+      return false;
+    }); //exlusion laucnch
+
+    $(document).on('tap','#to-home-excl',function(e){
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      $.ajax({
+        url:'new/radio_detect_cancel.php',
+        data:{
+          new_controller_id: localStorage.exclude_id_box
+        },
+        use_local: 0,
+        complete: function(){
+          clearInterval(excl_int);          
+          $('#exclusion-launch').fadeIn();
+          $('#to-home-excl').fadeOut();
+          
+            setTimeout(function(){
+                $.mobile.changePage("#zwave_page");
+            },4000);
+        },
+        success: function(data2){           
+          console.log(data2);          
+        },
+        error: function(x,y,z){
+            console.log("textStatus : "+ y +" ErrorThrown : "+ z);
+        }
+      });
+      return false;
+    }); // exclusion cancel
+});
+
+
+//= = = = = = = = = = = video         show_video
+$('#valide_date').on('click',function()
+  {
+    $('#popup_date').popup('close');
+    show_loading();
+    $('#video_read').empty();
+    var now = $('#my_date').val();
+    var get_date = now.replace('-','');
+    get_date = get_date.replace('-','')
+    
+    $.ajax({
+      url:'new/camera_video_generate.php',
+      data: {
+        controller_module_id: id_camera,
+        date: get_date,
+        version: 2
+      },
+      success: function(data_success){
+        $('#video_read').html(data_success.msg);
+        var video_loaded = '';
+        
+        //load video 
+        load_video_int = setInterval(function(){
+          $.ajax({
+            url:'new/camera_video_poll.php',
+            data: {
+              controller_module_id: id_camera,
+              version: 2
+            },
+            success: function(data_load_video){
+              console.log(data_load_video);
+              hide_loading();
+              $('#video_read').empty(); 
+              
+              // video en cours
+              if (data_load_video.status_id == 2)
+              {
+                $('#video_read').html('Téléchargement '+data_load_video.msg);
+              }
+              else
+              {
+                clearInterval(load_video_int);
+                //download video 
+                if(data_load_video.status_id == 5)
+                { // shard       
+                  var video_url_download = 'camera'+shard+'.eedomus.com/secure/'+id_camera+'/video/'+data_load_video.msg;
+                  
+                  video_loaded +=  '<video src="https://'+ video_url_download+'" width=640 height=360 type="video/mp4" controls autoplay="true">'
+                  video_loaded +=     'lecture camera';
+                  video_loaded +=  '</video>'
+                  $('#video_read').append(video_loaded);
+                }
+
+                // no data video
+                if (data_load_video.status_id == 3)
+                {  
+                  $('#video_read').html(data_load_video.msg);
+                }
+              }
+            }
+          });
+        },3000);
+
+      },
+      error: function(data_error){
+        alert('eror');
+      }
+    });
+    return false;
+  }
+);
+
+//video_loaded +=  '<video src="'+video_url_download+'" width=640 height=360 type="video/mp4">'
+//video_loaded +=     'lecture camera';
+//video_loaded +=  '</video>'
