@@ -37,6 +37,7 @@ var HOST = window.localStorage.getItem("HOST") || 'https://m.eedomus.com/';
 
 var favoris_elements = "";
 var indice_map = 0;
+var id_map = 0;
 var latitude = 0;
 var longitude = 0;
 var length_card;
@@ -47,7 +48,6 @@ var startTime = new Date().getTime();
 var temp = {};
 
  var longs = [];
-var lats = [];
 var conts = [];
 
 if (webapp_mode == 'wan' && window.location.href.match(/^https:\/\/.*\.eedomus\.com/))
@@ -875,7 +875,7 @@ function register_push_notifications()
 					// in app notifications sounds must be handled here
 					var path = window.location.pathname;
 					path = path.substr(path, path.length - 10);
-					var sound = 'file://' + path + 'sounds/eedomuspush.mp3';
+					var sound = 'file://' + path + 'audio/eedomuspush.mp3';
 			
 					//alert("Debug : trying to play "+sound);
 					var audio = new Audio(sound);
@@ -1034,7 +1034,8 @@ function build_widgets(panel_id)
 	
 	var hidden_channels = new Array(); 
   length_card = periph_list.length;
-
+  var lats = [];
+  indice_map = 0;
   $.each(periph_list, function(index, controller_module_id) { 
 
     var periph = periphs[controller_module_id];
@@ -1143,6 +1144,7 @@ function build_widgets(panel_id)
     
     // geolocation and google map
       temp.controller_geo_id = periph.controller_module_id;
+
       geo_pos          = periph.last_value;
       geo_pos          = geo_pos.split(",");       
       temp.geo_pos_lat = parseFloat(geo_pos[0]); 
@@ -1151,46 +1153,23 @@ function build_widgets(panel_id)
       conts.push(temp.controller_geo_id);
       lats.push(temp.geo_pos_lat);
       longs.push(temp.geo_pos_lng);
-   
+      
     if(periph.module_id == 31){
-      indice_map++;
-      var id = indice_map - 1;
+      var id = indice_map;
       var div_geoloc = '<li class="geoloc_card" > <div class="nd2-card">';
       div_geoloc += '<div class="card-title has-supporting-text cam-header">';
       div_geoloc += '<input type="hidden" id="lat-minigeomap'+id+'" value=""/>';
       div_geoloc += '<input type="hidden" id="lng-minigeomap'+id+'" value=""/>';
       div_geoloc +=   '<div style="background-color:#c0c0c0;">'+periph.custom_name+'</div>';
-      div_geoloc +=   '<a href="#" class="to-full-map" data-page-to="#map-page">';
+      div_geoloc +=   '<a href="#" class="to-full-map" id="'+temp.controller_geo_id+'" onclick="id_map = $(this).attr(\'id\');" data-page-to="#map-page">';
       div_geoloc +=     '<div class="card-media geomap" id="geomap'+id+'" style="width:100%;height:250px"></div>';
       div_geoloc +=   '</a>';
+      div_geoloc +=   '<div id = "coords_indisponible'+id+'" style="display:none;" >Coordonnées GPS indisponibles</div>';
       div_geoloc += '</div></div></li>';
-     
-       list.append(div_geoloc);
+      
+      list.append(div_geoloc);
 
-       if ( indice_map == length_card) {
-              var map_geo = {};
-              var i = 0;
-              for ( i = 0; i < length_card; i++){               
-                    map_geo = new google.maps.Map(document.getElementById('geomap'+ i), {
-                    zoom: 10,
-                    center: new google.maps.LatLng( lats[i],longs[i] ),
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                  });
-                  var marker = new google.maps.Marker({
-                      map: map_geo, 
-                      position: new google.maps.LatLng( lats[i],longs[i] )  
-                  });
-                  var center = map_geo.getCenter();
-                  google.maps.event.trigger(map_geo, "resize");
-                  map_geo.setCenter(center);
-
-                  $('#geomap'+ i).parent('a').attr('data-lat',lats[i]);
-                  $('#geomap'+ i).parent('a').attr('data-long',longs[i]);
-                  $('#geomap'+ i).parent('a').attr('data-div',i);
-              }        
-
-        }       
-        
+      indice_map++;      
     }
 
 
@@ -1357,6 +1336,43 @@ function build_widgets(panel_id)
 	
 	// remember last panel for next login/Refresh
 	window.localStorage.setItem("last_panel_id", panel_id);
+
+  //show thumbnail map
+  if (indice_map > 0 ) { 
+      var map_geo = {};
+      var i = 0;
+      setTimeout(function(){
+        for ( i = 0; i < length_card; i++){  
+          if(!isNaN(lats[i]) && !isNaN(longs[i])){
+            map_geo = new google.maps.Map(document.getElementById('geomap'+ i), {
+            zoom: 10,
+            center: new google.maps.LatLng( lats[i],longs[i] ),
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+
+            zoomControl: false,
+            scaleControl: true,
+            streetViewControl: false,
+            mapTypeControl: false
+          });
+          var marker = new google.maps.Marker({
+              map: map_geo, 
+              position: new google.maps.LatLng( lats[i],longs[i] )  
+          });
+          var center = map_geo.getCenter();
+          google.maps.event.trigger(map_geo, "resize");
+          map_geo.setCenter(center);
+
+          $('#geomap'+ i).parent('a').attr('data-lat',lats[i]);
+          $('#geomap'+ i).parent('a').attr('data-long',longs[i]);
+          $('#geomap'+ i).parent('a').attr('data-div',i);
+          $('#coords_indisponible'+ i).attr('style','display:none;');
+        }else{
+          $('#coords_indisponible'+ i).attr('style','display:block;background-color:#c0c0c0; color: #ff0000;');
+        }  
+      }       
+
+    },150);
+  } 
 }
 
 //////////////////////-------///////////////////
@@ -2224,7 +2240,6 @@ $(document).on('pagebeforeshow','#modification-page',function(){
 
 
 
-
 // Show favorite in right menu
   $('a[href="#menu_favoris"]').on('click', function(){
     build_widgets(-1);
@@ -2370,179 +2385,501 @@ $("#id_diag").on('click',function(){
 
 //= = = = = = = = = = = Map et géolocalisation
 //= = = = = = = = = = = = = = = = = = = = = = = =
-$(document).on('pagebeforeshow','#map-page', function() {
+$(document).on('pagebeforeshow','#map-page', function() {   
+
+  var frequence;
+  var duree;
+  $('#freq').on('keyup', function(){
+    frequence = parseFloat($('#freq').val());
+    if(isNaN(frequence) == true){
+      $('#freq').val(1);
+    }else{
+      if(frequence < 0){
+        $('#freq').val(1)
+      }
+      if(frequence > 60){
+        $('#freq').val(60)
+      }  
+    }
+  });
+
+  $('#duree').on('keyup', function(){
+    duree = parseFloat($('#duree').val());
+    if(isNaN(duree) == true ){
+      $('#duree').val(1);
+    }else{
+      if(duree < 0){
+        $('#duree').val(1)
+      }
+      if(duree > 60){
+        $('#duree').val(60)
+      }
+    }
+  });
+
   setTimeout(function(){
-      full_map();
+    full_map();
   },150);
   
 
-    var frequence;
-    var duree;
-    $('#freq').on('keyup', function(){
-      frequence = parseFloat($('#freq').val());
-      if(isNaN(frequence) == true){
-        $('#freq').val(1);
-      }else{
-        if(frequence < 0){
-          $('#freq').val(1)
-        }
-        if(frequence > 60){
-          $('#freq').val(60)
-        }  
-      }
-    });
+  $('#locate-once').on('tap',function(){
+    state_locate_more = false;        
 
-    $('#duree').on('keyup', function(){
-      duree = parseFloat($('#duree').val());
-      if(isNaN(duree) == true ){
-        $('#duree').val(1);
-      }else{
-        if(duree < 0){
-          $('#duree').val(1)
-        }
-        if(duree > 60){
-          $('#duree').val(60)
-        }
-      }
-    });
+    var new_lat = 0;
+    var new_lng = 0;
 
-    $('#locate-once').on('tap',function(){
-      state_locate_more = false;
-      $.ajax({
-        url: 'direct_exec.php',
-        data:{
-            last_action: parseFloat(localStorage.lat) +','+parseFloat(localStorage.lng),
-            controller_module_id: temp.controller_geo_id
-        },       
-        method: 'GET',
-        use_local: false,
-        dataType: 'json',
-        success:function(response){
-          console.log(response);
-        },
-        error:function(x,y,z){
-          console.log('textStatus :'+ y +' | ErrorThrown :' + z);
-        }
-      });
-
-      var new_lat = $('#lat-minigeomap' + localStorage.div).val();
-      var new_lng = $('#lng-minigeomap' + localStorage.div).val();
-
-      full_map(new_lat,new_lng);
-
-      return false;
-    });
-
-
-    $('#locate-more').on('tap',function(){
-        
-        $('#follow').hide();
-        $('#not_follow').show();
-        
-        state_locate_more = true;
-        startTime = new Date().getTime();
-
-        if (!isNaN(localStorage.lat) ){
-            var map = new google.maps.Map(document.getElementById('map-wrap'), {
-              center: {lat: parseFloat(localStorage.lat), lng: parseFloat(localStorage.lng)},
-              zoom: 12
-            });
-            var marker = new google.maps.Marker({
-                  map: map, 
-                  position: new google.maps.LatLng(parseFloat(localStorage.lat), parseFloat(localStorage.lng))
-            });
-        }    
-    
-    $('#interval').popup('close');
-    /*********************************/
-    var interval = window.setInterval(function(){
-      
-      var new_lat = $('#lat-minigeomap' + localStorage.div).val();
-      var new_lng = $('#lng-minigeomap' + localStorage.div).val();
-
-      if (new_lng != "" && new_lng != ""){
-        
-          if(state_locate_more ==true){
-              console.log('loc more tru');
-              $.ajax({
-                url: 'direct_exec.php',
-                data:{
-                    last_action: parseFloat(localStorage.lat) +','+parseFloat(localStorage.lng),
-                    controller_module_id: temp.controller_geo_id
-                },        
-                method: 'GET',
-                use_local: false,
-                dataType: 'json',
-                success:function(response){
-                  console.log('success ! ');
-                },
-                error:function(x,y,z){
-                  console.log('textStatus :'+ y +' | ErrorThrown :' + z);
-                }
-              });
-              var current_position = new google.maps.LatLng(new_lat, new_lng);
-              
-              map.setOptions({
-                  zoom: 12,
-                  center: current_position,
-                  mapTypeId: google.maps.MapTypeId.ROADMAP
-              });
-            
-              var new_marker = new google.maps.Marker({
-                  position: current_position
-              });
-              marker.setMap(null);
-              new_marker.setMap(null);
-              new_marker.setMap(map);
-
-
-              if(new Date().getTime() - startTime > $('#duree').val()*60*1000 ){
-                window.clearInterval(interval);
-                state_locate_more = false;
-                console.log('fin interval');
-                return;
-              }
-            }else{
-              console.log("lmf");
-            }
-        }
-
-      
-    },$('#freq').val()*10000);
-    /*********************************/
+    full_map(new_lat,new_lng, true);
 
     return false;
-    });
 
-    $('#not_follow').on('tap', function(){
+  });
 
-      $('#not_follow').hide();
-      $('#follow').show();
-      state_locate_more = false;
-      window.clearInterval(interval);
-    });
+
+  $('#locate-more').on('tap',function()
+  {
+      
+    $('#follow').hide();
+    $('#not_follow').show();
+    
+    state_locate_more = true;
+    startTime = new Date().getTime();
+
+    if (!isNaN(localStorage.lat) && !isNaN(localStorage.lng) ){
+
+      var marker = new google.maps.Marker({
+            //map: map, 
+            position: new google.maps.LatLng(parseFloat(localStorage.lat), parseFloat(localStorage.lng))
+      });
+    }else{alert('Coordonnées GPS indisponibles');}   
+  
+    $('#interval').popup('close');
+    
+
+    var interval = window.setInterval(function(){
+      
+    var new_lat = 0;
+    var new_lng = 0;
+
+    if(state_locate_more ==true){
+
+        full_map(new_lat,new_lng,true)
+
+        if(new Date().getTime() - startTime > $('#duree').val()*60*1000 ){
+          window.clearInterval(interval);
+          state_locate_more = false;
+          return;
+        }
+      }
+      else
+      {
+        console.log("ne plus suivre");
+      }
+
+      
+    },$('#freq').val()*60*1000);
+
+    return false;
+  });
+
+  $('#not_follow').on('tap', function(){
+
+    $('#not_follow').hide();
+    $('#follow').show();
+    state_locate_more = false;
+    window.clearInterval(interval);
+  });
 
 });
 
 
 
-function full_map(latitude,longitude) {
-    latitude = typeof latitude !== 'undefined' ? latitude : window.localStorage.lat ;
-    longitude = typeof longitude !== 'undefined' ? longitude : window.localStorage.lng ;
+function full_map(latitude,longitude, send_location) 
+{
+    
+    //--send_location-- 3em parametre to verify if send location or not
+    if(!send_location)
+    {
+      latitude = typeof latitude !=='undefined' ? latitude : window.localStorage.lat ;
+      longitude = typeof longitude !== 'undefined' ? longitude : window.localStorage.lng ;
 
-    // latitude = temp.geo_pos_lat;
-    // longitude = temp.geo_pos_lng;
-    var map = new google.maps.Map(document.getElementById('map-wrap'), {
-      center: {lat:parseFloat(latitude), lng: parseFloat(longitude)},
-      zoom: 12
-    });
-    var marker = new google.maps.Marker({
-          map: map, 
-          position: new google.maps.LatLng(parseFloat(latitude), parseFloat(longitude))
-    });
-     var center = map.getCenter();
-      google.maps.event.trigger(map, "resize");
-      map.setCenter(center);
+      if(isNaN(latitude) || isNaN(longitude)){alert('Coordonnées GPS indisponibles');}
 
+        var map = new google.maps.Map(document.getElementById('map-wrap'), {
+          center: {lat:parseFloat(latitude), lng: parseFloat(longitude)},
+          zoom: 12
+        });
+        var marker = new google.maps.Marker({
+              map: map, 
+              position: new google.maps.LatLng(parseFloat(latitude), parseFloat(longitude))
+        });
+        var center = map.getCenter();
+        google.maps.event.trigger(map, "resize");
+        map.setCenter(center);
+
+    }
+    else
+    {
+      // send my location
+      var mylocation = navigator.geolocation;
+      mylocation.getCurrentPosition(success_loc, failure_loc);
+      
+    }
+  
 }
 
+// ----- begin send my location
+function success_loc(positions)
+{
+  latitude = positions.coords.latitude;
+  longitude = positions.coords.longitude;
+  
+  $.ajax({
+    url: 'direct_exec.php',
+    data:{
+        last_action: latitude +','+longitude,
+        controller_module_id: id_map
+    },       
+    method: 'GET',
+    use_local: false,
+    dataType: 'json',
+    success:function(response){
+      console.log(response);
+    },
+    error:function(x,y,z){
+      console.log('textStatus :'+ y +' | ErrorThrown :' + z);
+    }
+  });
+
+  var map = new google.maps.Map(document.getElementById('map-wrap'), {
+    center: {lat:latitude, lng: longitude},
+    zoom: 12
+  });
+
+  var marker = new google.maps.Marker({
+      map: map,
+      position: new google.maps.LatLng(latitude, longitude)
+  });
+  
+}
+
+function failure_loc(){
+  alert("Coordonnées GPS indisponible.")
+}
+
+// ----- end send my location
+
+
+//= = = = = = = = = = = mon compte  
+$("#id_moncompte").on('click',function(){
+  $.ajax({
+      url: '/json/account_info.php',
+      data:{},       
+      method: 'GET',
+      use_local: false,
+      dataType: 'json',
+      success:function(response){
+        $('#id_user').empty();
+        $('#id_account_type').empty();
+        $('#id_expiration').empty();
+
+        $('#id_user').append(response.login);
+        $('#id_account_type').append(response.account_type);
+        $('#id_expiration').append(response.account_expiration);
+
+      },
+      error:function(erreur){
+        console.log(erreur);
+      }
+    });
+});
+
+$('#to-home-moncompte').on('click',function(){
+    $.mobile.changePage("#home");
+    return false;
+  });
+
+
+//= = = = = = = = = = = zwave 
+$(document).on('pagebeforeshow','#zwave_page', function() {
+  show_loading();
+  var nom_box = "";  
+  var exclusion = "";
+  var cont_id;
+  var class_zwave = "waves-effect .waves-circle ui-btn ui-btn-icon-right ui-icon-carat-r";
+  $("#ul-zwave" ).empty();
+  $.ajax({
+    url: 'json_panel_list.php',
+    use_local: true,
+    complete: function(){
+      hide_loading();
+    },
+    success: function(data){
+      var i = 0;
+      $.each(data.controllers, function(index, controller){       
+        
+        // include just the real device : controller[4] == 1
+        if ( controller[4] == 1 ) {
+            var id_inclu = 'id'+i;
+            nom_box = controller[1].replace('[','');
+            nom_box = nom_box.replace(']','');
+            cont_id = controller[0];
+
+            var inclusion = "";
+            inclusion += '<li class="inclusion_zwave succeed incl">';
+            inclusion +=    '<a href="#inclusion_zwave_page" id="'+id_inclu+'" class ="'+ class_zwave +'" data-cont_id="'+ cont_id +'" data-nom_box="'+ nom_box +'"><span></span>';
+            inclusion +=        '<span class="box_name">Inclusion Z-Wave '+ nom_box +'</span>';
+            inclusion +=    '</a>';
+            inclusion += '</li>';
+            $("#ul-zwave" ).append(inclusion);
+
+            var exinclusion = "";
+            exinclusion += '<li class="inclusion_zwave failed excl">';
+            exinclusion +=    '<a href="#exclusion_zwave_page" class ="'+ class_zwave +'" data-cont_id="'+ cont_id +'" data-nom_box="'+ nom_box +'"><span></span>';
+            exinclusion +=        '<span class="box_name">Exclusion Z-Wave '+ nom_box +'</span>';
+            exinclusion +=    '</a>';
+            exinclusion += '</li>';
+            $("#ul-zwave" ).append(exinclusion);
+        }
+        
+        i++;
+      });
+  }
+});
+
+$(document).on('tap','.incl a',function(){
+  window.localStorage.include_nom_box = $(this).data('nom_box');
+  window.localStorage.include_id_box = $(this).data('cont_id');
+  return;
+});
+
+$(document).on('tap','.excl a',function(){
+  window.localStorage.exclude_nom_box = $(this).data('nom_box');
+  window.localStorage.exclude_id_box = $(this).data('cont_id');
+  return;
+});
+ 
+});
+
+$('#to-home-zwave').on('click',function(){
+    $.mobile.changePage("#home");
+    return false;
+});
+
+//
+$('#to-home-inclusion-zwave, #to-home-exclusion-zwave').on('click',function(){
+    $.mobile.changePage("#zwave_page");
+    return false;
+});
+
+
+$(document).on('pagebeforeshow','#inclusion_zwave_page',function(){
+    $('#include_id_box').html(localStorage.include_nom_box);
+    $('#content-inclusion-zwave').html(
+        '<p>'+
+          'Avant de commancer:'+
+          '<br>'+
+          '- Regardez la notice de votre péripherique pour comprendre le fonctionnement de son boutton d\'inclusion (simple clic, triple clic, appui long ...)'+
+          '<br>'+
+         ' - Si inclus auparavant, veuillez vous assurer que votre péripherique a été préalablement exclu.'+
+        '</p>');
+    var interval_incl;
+    
+    $(document).on('tap','#inclusion-launch',function(e){
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      var bip = 0;
+      show_loading();
+      $('#inclusion-launch').fadeOut();
+      $('#inclusion-cancel').fadeIn();      
+
+      $.ajax({
+        url:'add_wireless.php',
+        data:{
+          // app : 'pg',
+          mobile : '1',
+          new_controller_id : localStorage.include_id_box,
+          wireless_mode : 'add'
+        },
+        use_local:0,
+        success: function(data){
+
+                hide_loading();
+
+                interval_incl = setInterval(function(){
+                  
+                  $.ajax({
+                    url:'add_wireless_poll.php',
+                    data:{
+                      // app : 'pg',
+                      mobile : '1',
+                      new_controller_id : localStorage.include_id_box,
+                    },
+                    use_local:0,
+                    success: function(data1){                      
+                      if (data1[0][0] == 5 || data1[0][0] == 16 || data1[0][0] == 4 || data1[0][0] == 6){ //Délai d'attente atteinte
+                          $('#content-inclusion-zwave').html( data1[0][1] );
+                          clearInterval(interval_incl);          
+                          $('#inclusion-launch').fadeIn();
+                          $('#inclusion-cancel').fadeOut();
+                      }else{
+                          var old_html = $('#content-inclusion-zwave').html();
+                          var new_html = data1[0][1];
+                          if ( old_html != new_html ){
+                            $('#content-inclusion-zwave').html( new_html );
+                          }
+                          // var patt = /.*?(<\/audio>).*?$/;
+                          // var res = patt.test( old_html );
+                          // if ( res ){
+                          //     bip++;
+                          //     if (bip == 1){
+                          //         $('#content-inclusion-zwave').html( data1[0][1] );
+                          //     }else{
+                          //         $('#content-inclusion-zwave audio').remove();
+                          //     }
+                              
+                          // }else{
+                          //     $('#content-inclusion-zwave').html( data1[0][1] ); 
+                          // }                                            
+
+                      }
+                      
+                    },
+                    error: function(x,y,z){
+                        console.log("textStatus : "+ y +" ErrorThrown : "+ z);
+                    }
+                  });
+
+                },3000);
+            
+
+        }, //success add_wireless
+        error: function(x,y,z){
+          console.log("textStatus : "+ y +" ErrorThrown : "+ z);
+        }
+      });
+
+      return false;
+    }); //launch inclusion
+
+    $(document).on('tap','#inclusion-cancel',function(e){
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      $.ajax({
+        url:'new/radio_detect_cancel.php',
+        data:{
+          new_controller_id: localStorage.include_id_box
+        },
+        use_local: 0,
+        complete: function(){
+          clearInterval(interval_incl);          
+           $('#inclusion-launch').fadeIn();
+          $('#inclusion-cancel').fadeOut();
+            setTimeout(function(){
+                $.mobile.changePage("#zwave_page");
+            },4000);
+          
+        },
+        success: function(data2){           
+          console.log(data2);          
+        },
+        error: function(x,y,z){
+            console.log("textStatus : "+ y +" ErrorThrown : "+ z);
+        }
+      });
+      return false;
+    }); //cancel inclusion
+
+    $('')
+});
+
+$(document).on('pagebeforeshow','#exclusion_zwave_page',function(){
+    var excl_int;
+
+    $('#exclude_id_box').html(localStorage.exclude_nom_box);
+
+    $(document).on('tap','#exclusion-launch',function(e){
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      $.ajax({
+        url:'add_wireless.php',
+        data:{
+          // app : 'pg',
+          mobile : '1',
+          new_controller_id : localStorage.exclude_id_box,
+          wireless_mode : 'del'
+        },
+        use_local:0,
+        success: function(data){
+          $('#exclusion-launch').fadeOut();
+          $('#to-home-excl').fadeIn();
+
+              excl_int = setInterval(function(){
+              $.ajax({
+                url:'add_wireless_poll.php',
+                data:{
+                  // app : 'pg',
+                  mobile : '1',
+                  new_controller_id : localStorage.exclude_id_box,
+                },
+                use_local:0,
+                success: function(data1){
+                  if (data1[0][0] == 5 || data1[0][0] == 16 || data1[0][0] == 4 || data1[0][0] == 6){ //Délai d'attente atteinte
+                      $('#content-exclusion-zwave').html( data1[0][1] );
+                      clearInterval(excl_int);          
+                      $('#exclusion-launch').fadeIn();
+                      $('#to-home-excl').fadeOut();
+                  }else{
+                      var old_html = $('#content-inclusion-zwave').html();
+                      var new_html = data1[0][1];
+                      if ( old_html != new_html ){
+                        $('#content-inclusion-zwave').html( new_html );
+                      }
+                  }
+                  
+                },
+                error: function(x,y,z){
+                    console.log("textStatus : "+ y +" ErrorThrown : "+ z);
+                }
+              });
+            },3000);        
+
+        },
+        error: function(x,y,z){
+            console.log("textStatus : "+ y +" ErrorThrown : "+ z);
+        }
+      });
+      return false;
+    }); //exlusion laucnch
+
+    $(document).on('tap','#to-home-excl',function(e){
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      $.ajax({
+        url:'new/radio_detect_cancel.php',
+        data:{
+          new_controller_id: localStorage.exclude_id_box
+        },
+        use_local: 0,
+        complete: function(){
+          clearInterval(excl_int);          
+           $('#exclusion-launch').fadeIn();
+          $('#to-home-excl').fadeOut();
+          
+            setTimeout(function(){
+                $.mobile.changePage("#zwave_page");
+            },4000);
+        },
+        success: function(data2){           
+          console.log(data2);          
+        },
+        error: function(x,y,z){
+            console.log("textStatus : "+ y +" ErrorThrown : "+ z);
+        }
+      });
+      return false;
+    }); // exclusion cancel
+});
