@@ -459,9 +459,8 @@
     to {transform:rotate(360deg);}
 }
 
-/* Diagnostic et zwave page*/
-#list-diagnostic span, 
-#list-zwave span {
+/* Diagnostic page */
+#list-diagnostic span {
   position: absolute;
   top: 0; left:0;
   width: 45px;
@@ -472,40 +471,31 @@
   background-size: 100%;
   border-radius: 10px;
 }
-#list-diagnostic ul li a,
-#list-zwave ul li a
-{
+#list-diagnostic ul li a{
   padding-left: 50px;
 }
-#list-diagnostic ul li,
-#list-zwave ul li
-{
+#list-diagnostic ul li{
   margin: 10px 0px -5px 5px;
 }
-#list-diagnostic .unknown span,
-#list-zwave .unknown span
+#list-diagnostic #eedomus-cloud.unknown span
 {
   background-image: url(../img/unknown.png);
 }
 #list-diagnostic #network-connection.failed span,
 #list-diagnostic #eedomus-cloud.failed span,
 #list-diagnostic #box-cloud.failed span,
-#list-diagnostic #box-lan.failed span,
-#list-zwave .inclusion_zwave.failed span,
-#list-zwave .exclusion_zwave.failed span {
+#list-diagnostic #box-lan.failed span {
   background-image: url(../img/forbidden.png);
 }
-/*#list-diagnostic #box-cloud.unknown span
+#list-diagnostic #box-cloud.unknown span
 {
   background-image: url(../img/unknown.png);
-}*/
+}
 #list-diagnostic #network-connection.succeed span,
 #list-diagnostic #eedomus-cloud.succeed span,
 #list-diagnostic #box-cloud.succeed span,
-#list-diagnostic #box-lan.succeed span,
-#list-zwave .inclusion_zwave.succeed span,
-#list-zwave .exclusion_zwave.succeed span 
-{
+#list-diagnostic #box-lan.succeed span
+ {
   background-image: url(../img/check.png);
 }
 
@@ -583,27 +573,10 @@
   padding: 5px;
 }
 
-#not_follow,
-#inclusion-cancel,
-#to-home-excl{
+#not_follow{
   display: none;
 }
 
 .moncompte_user, .moncompte_account_type, .moncompte_expiration{
   margin: 0px 0px 10px 0px;
-}
-
-#inclusion_zwave_page,
-#exclusion_zwave_page {
-  background: #000;
-}
-#inclusion_zwave_page .black-bg,
-#exclusion_zwave_page .black-bg{
-  color: #fff;
-}
-#inclusion-cancel,
-#inclusion-launch,
-#exclusion-launch,
-#to-home-excl {
-    background: #888;
 }

@@ -233,6 +233,39 @@
 
 </div>
 
+
+<!-- video page -->
+<div data-role="page" id="video_page" data-title="eedomus">
+
+  <div data-role="header" data-position="fixed" data-tap-toggle="false">
+    <h1 id="video_header" data-translate="true">&nbsp;</h1>
+    <a href="#" class="ui-btn ui-btn-left" data-rel="back"><i class="zmdi zmdi-arrow-back"></i></a>
+  </div>
+
+  <div data-role="content">  
+    <p id="video_read">
+      &nbsp;
+    </p>
+
+    <p style="text-align:center">
+      <!--a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="chose_date" href="#">Choisir une date</a-->
+      <a href="#popup_date" id="chose_date" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline">
+        Choisir une date
+      </a>
+      <a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="generate" href="#">Générer</a>
+
+      <div data-role="popup" id="popup_date" class="ui-corner-all">
+        <p>Date: </p>
+        <input type="date" id="my_date" class="ui-btn-inline" placeholder="aaaa-mm-jj" value=""/>
+
+        <a href="#" id="valide_date" class="ui-btn ui-btn-inline">Valider</a>
+      </div>
+    </p>
+  </div>
+
+</div>
+<!-- end video page -->
+
 <!-- Favorite page  -->
 <div data-role="page" id="favorite_page" data-widget-id="" data-title="eedomus">
 

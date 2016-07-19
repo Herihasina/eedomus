@@ -41,6 +41,7 @@ var id_map = 0;
 var latitude = 0;
 var longitude = 0;
 var length_card;
+var id_camera = 0;
 
 var state_locate_more = false;
 var startTime = new Date().getTime();
@@ -382,22 +383,33 @@ function init()
       return false;
     }
 
-    if (toPage == "#history_page")
+
+
+    if (toPage == "#history_page" || toPage == "#video_page") // vidéo
     {
       var filter_mvt = $(this).data('filter-mvt');
       if (typeof filter_mvt != 'undefined')
       {
-        $('ul[data-role="nd2tabs"]').hide();
-        build_history(controller_module_id, filter_mvt);
+        if (filter_mvt == 2)
+        {
+          id_camera = $(this).data('controller-id');
+          build_history(controller_module_id, filter_mvt);
+        }
+        else
+        {
+          $('ul[data-role="nd2tabs"]').hide();
+          build_history(controller_module_id, filter_mvt);
+        }
       }
       else
       {
+        
         $('ul[data-role="nd2tabs"]').show();
         build_graph(controller_module_id);
       }
     }
     else
-    {
+    { 
       if ($(this).data('action') == 'macro')
       {
         doMacro($(this).data('module-id'), $(this).data('macro-id'));
@@ -1143,9 +1155,11 @@ function build_widgets(panel_id)
 
     
     // geolocation and google map
-      temp.controller_geo_id = periph.controller_module_id;
+    temp.controller_geo_id = periph.controller_module_id;
 
-      geo_pos          = periph.last_value;
+    geo_pos          = periph.last_value;
+       
+    if(periph.module_id == 31){
       geo_pos          = geo_pos.split(",");       
       temp.geo_pos_lat = parseFloat(geo_pos[0]); 
       temp.geo_pos_lng = parseFloat(geo_pos[1]);
@@ -1153,8 +1167,7 @@ function build_widgets(panel_id)
       conts.push(temp.controller_geo_id);
       lats.push(temp.geo_pos_lat);
       longs.push(temp.geo_pos_lng);
-      
-    if(periph.module_id == 31){
+
       var id = indice_map;
       var div_geoloc = '<li class="geoloc_card" > <div class="nd2-card">';
       div_geoloc += '<div class="card-title has-supporting-text cam-header">';
@@ -1181,7 +1194,9 @@ function build_widgets(panel_id)
       div += '<h5 class="card-subtitle cam-title cam-subtitle">'+since_from+'</h5>';
       div += '</div>';
 
-      div += '<div class="card-media"><a href="#" data-page-to="#periph_page" data-controller-id="'+periph.controller_module_id+'"><img id="cam_img'+periph.controller_module_id+'" class="card-avatar cam-img" src="'+last_value_show+'" cam_url='+cam_url+'></a>';
+      div += '<div class="card-media">';
+      div +=     '<a href="#" data-page-to="#periph_page" data-controller-id="'+periph.controller_module_id+'"><img id="cam_img'+periph.controller_module_id+'" class="card-avatar cam-img" src="'+last_value_show+'" cam_url='+cam_url+'>';
+      div +=     '</a>';
       //div += '<div class="card-action">';
       //div += '<a href="#" class="ui-btn ui-btn-inline">'+_('Direct')+'</a>';
       //div += '<a href="#history_page" data-filter-mvt="1" data-controller-id="'+periph.controller_module_id+'" class="ui-btn ui-btn-inline">'+_('Historique des mouvements')+'</a>';
@@ -1375,7 +1390,7 @@ function build_widgets(panel_id)
   } 
 }
 
-//////////////////////-------///////////////////
+
 
 function getCamUrl(controller_module_id)
 {
@@ -1442,8 +1457,9 @@ function build_periph(controller_module_id)
 
       div += '<div class="card-media"><img id="direct_cam" class="card-avatar" src="'+cam_image+'" cam_url="'+cam_url+'"></a>';
       div += '<div class="card-action">';
-      div += '<a href="#history_page" data-filter-mvt="1" data-controller-id="'+periph.controller_module_id+'" class="ui-btn ui-btn-inline">'+_('Historique des mouvements')+'</a>';
-      div += '<a href="#history_page" data-filter-mvt="0" data-controller-id="'+periph.controller_module_id+'" class="ui-btn ui-btn-inline">'+_('Historique complet')+'</a>';
+      div +=    '<a href="#video_page" data-filter-mvt="2" data-controller-id="'+periph.controller_module_id+'" id="camera_'+periph.controller_module_id+'" class="ui-btn ui-btn-inline">Vidéo</a>';
+      div +=    '<a href="#history_page" data-filter-mvt="1" data-controller-id="'+periph.controller_module_id+'" class="ui-btn ui-btn-inline">'+_('Historique des mouvements')+'</a>';
+      div +=    '<a href="#history_page" data-filter-mvt="0" data-controller-id="'+periph.controller_module_id+'" class="ui-btn ui-btn-inline">'+_('Historique complet')+'</a>';
       div += '</div>';
       div += '</div></div></li>';
       $('#periph_list').append(div);
@@ -1663,7 +1679,7 @@ function build_graph(controller_module_id, tab, polling)
 
 // Build History
 function build_history (controller_module_id, filter_mvt, polling)
-{
+{ 
   $("[data-role='nd2tabs']").tabs('switchTabWithoutTransition', $("li[data-tab='history']"), 'history', 0);
 
   var list = $('#history_list');
@@ -1698,7 +1714,9 @@ function build_history (controller_module_id, filter_mvt, polling)
     }
     title = getName(periph.controller_module_id, true)+' ('+title+')';
 
-    $('#history_header').html(title);
+    $('#history_header').html(title); 
+    $('#video_header').html(title);
+    
   }
 
   show_loading();
@@ -2866,7 +2884,7 @@ $(document).on('pagebeforeshow','#exclusion_zwave_page',function(){
         use_local: 0,
         complete: function(){
           clearInterval(excl_int);          
-           $('#exclusion-launch').fadeIn();
+          $('#exclusion-launch').fadeIn();
           $('#to-home-excl').fadeOut();
           
             setTimeout(function(){
@@ -2883,3 +2901,80 @@ $(document).on('pagebeforeshow','#exclusion_zwave_page',function(){
       return false;
     }); // exclusion cancel
 });
+
+
+//= = = = = = = = = = = video         show_video
+$('#valide_date').on('click',function()
+  {
+    $('#popup_date').popup('close');
+    show_loading();
+    $('#video_read').empty();
+    var now = $('#my_date').val();
+    var get_date = now.replace('-','');
+    get_date = get_date.replace('-','')
+    
+    $.ajax({
+      url:'new/camera_video_generate.php',
+      data: {
+        controller_module_id: id_camera,
+        date: get_date,
+        version: 2
+      },
+      success: function(data_success){
+        $('#video_read').html(data_success.msg);
+        var video_loaded = '';
+        
+        //load video 
+        load_video_int = setInterval(function(){
+          $.ajax({
+            url:'new/camera_video_poll.php',
+            data: {
+              controller_module_id: id_camera,
+              version: 2
+            },
+            success: function(data_load_video){
+              console.log(data_load_video);
+              hide_loading();
+              $('#video_read').empty(); 
+              
+              // video en cours
+              if (data_load_video.status_id == 2)
+              {
+                $('#video_read').html('Téléchargement '+data_load_video.msg);
+              }
+              else
+              {
+                clearInterval(load_video_int);
+                //download video 
+                if(data_load_video.status_id == 5)
+                { // shard       
+                  var video_url_download = 'camera'+shard+'.eedomus.com/secure/'+id_camera+'/video/'+data_load_video.msg;
+                  
+                  video_loaded +=  '<video src="https://'+ video_url_download+'" width=640 height=360 type="video/mp4" controls autoplay="true">'
+                  video_loaded +=     'lecture camera';
+                  video_loaded +=  '</video>'
+                  $('#video_read').append(video_loaded);
+                }
+
+                // no data video
+                if (data_load_video.status_id == 3)
+                {  
+                  $('#video_read').html(data_load_video.msg);
+                }
+              }
+            }
+          });
+        },3000);
+
+      },
+      error: function(data_error){
+        alert('eror');
+      }
+    });
+    return false;
+  }
+);
+
+//video_loaded +=  '<video src="'+video_url_download+'" width=640 height=360 type="video/mp4">'
+//video_loaded +=     'lecture camera';
+//video_loaded +=  '</video>'
