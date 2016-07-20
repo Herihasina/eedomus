@@ -393,7 +393,7 @@ function init()
         if (filter_mvt == 2)
         {
           id_camera = $(this).data('controller-id');
-          build_history(controller_module_id, filter_mvt);
+          //build_history(controller_module_id, filter_mvt);
         }
         else
         {
@@ -2902,16 +2902,63 @@ $(document).on('pagebeforeshow','#exclusion_zwave_page',function(){
     }); // exclusion cancel
 });
 
+// creation video_page and datepicker
+$(document).on('pagebeforeshow','#video_page',function(){
+  //Use French date
+  $.datepicker.regional['fr'] = {clearText: 'Effacer', clearStatus: '',
+    monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin',
+    'Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+    monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun',
+    'Jul','Aoû','Sep','Oct','Nov','Déc'],
+    monthStatus: 'Voir un autre mois', yearStatus: 'Voir un autre année',
+    weekHeader: 'Sm', weekStatus: '',
+    dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+    dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
+    dayNamesMin: ['D','L','M','M','J','V','S'],
+    dateFormat:"yy-mm-dd",
+
+    firstDay: 1, isRTL: false};
+  $.datepicker.setDefaults($.datepicker.regional['fr']);
+  //end translation of dates
+
+  $('#my_date').datepicker({
+    maxDate: new Date()
+  });   
+
+});
 
 //= = = = = = = = = = = video         show_video
 $('#valide_date').on('click',function()
   {
+     var get_date;
+
     $('#popup_date').popup('close');
     show_loading();
-    $('#video_read').empty();
+    $('#video_read').empty(); 
     var now = $('#my_date').val();
-    var get_date = now.replace('-','');
-    get_date = get_date.replace('-','')
+
+    if ( now != "") {
+        get_date = now.replace('-','');
+         get_date = get_date.replace('-',''); console.log('nifidy :'+ get_date);
+
+    }else{ // use current date if user didn't choose date
+
+        
+      Date.prototype.yyyymmdd = function() {
+        var yyyy = this.getFullYear().toString();
+        var mm = (this.getMonth()+1).toString(); 
+        var dd  = this.getDate().toString();
+        return yyyy + (mm[1]?mm:"0"+mm[0]) + (dd[1]?dd:"0"+dd[0]);
+      };
+
+      new_format = new Date(); 
+      get_date =  new_format.yyyymmdd();
+      console.log('Tsy nifidy :'+ get_date);
+    }
+    
+   
+    
+    
     
     $.ajax({
       url:'new/camera_video_generate.php',
@@ -2937,31 +2984,40 @@ $('#valide_date').on('click',function()
               hide_loading();
               $('#video_read').empty(); 
               
-              // video en cours
-              if (data_load_video.status_id == 2)
-              {
-                $('#video_read').html('Téléchargement '+data_load_video.msg);
-              }
-              else
-              {
-                clearInterval(load_video_int);
-                //download video 
-                if(data_load_video.status_id == 5)
-                { // shard       
-                  var video_url_download = 'camera'+shard+'.eedomus.com/secure/'+id_camera+'/video/'+data_load_video.msg;
-                  
-                  video_loaded +=  '<video src="https://'+ video_url_download+'" width=640 height=360 type="video/mp4" controls autoplay="true">'
-                  video_loaded +=     'lecture camera';
-                  video_loaded +=  '</video>'
-                  $('#video_read').append(video_loaded);
+                if (data_load_video.status_id != 1){
+
+                      // video en cours
+                      if (data_load_video.status_id == 2)
+                      {
+                        $('#video_read').html('Téléchargement '+data_load_video.msg);
+                      }
+                      else
+                      {
+                        clearInterval(load_video_int);
+                        //download video 
+                        if(data_load_video.status_id == 5)
+                        { // shard       
+                          var video_url_download = 'camera'+shard+'.eedomus.com/secure/'+id_camera+'/video/'+data_load_video.msg;
+                          
+                          video_loaded +=  '<video src="https://'+ video_url_download+'" width=640 height=360 type="video/mp4" controls autoplay="true">'
+                          video_loaded +=     'lecture camera';
+                          video_loaded +=  '</video>';
+                          $('#generate, #chose_date').fadeOut('fast');
+                          $('#video_read').append(video_loaded);
+                        }
+
+                        // no data video
+                        if (data_load_video.status_id == 3)
+                        {  
+                          $('#video_read').html(data_load_video.msg);
+                        }
+                      }
+                }
+                else{
+                  // download video interompue
+                  console.log('down video interompue');
                 }
 
-                // no data video
-                if (data_load_video.status_id == 3)
-                {  
-                  $('#video_read').html(data_load_video.msg);
-                }
-              }
             }
           });
         },3000);
@@ -2974,7 +3030,3 @@ $('#valide_date').on('click',function()
     return false;
   }
 );
-
-//video_loaded +=  '<video src="'+video_url_download+'" width=640 height=360 type="video/mp4">'
-//video_loaded +=     'lecture camera';
-//video_loaded +=  '</video>'

@@ -34,6 +34,7 @@
 
   <link rel="stylesheet" href="css/font-awesome.min.css" />
   <link rel="stylesheet" href="css/jquery.mobile.min.css" />
+  <link rel="stylesheet" href="css/jquery-ui.css" />
   <link rel="stylesheet" href="css/waves.min.css" />
   <link rel="stylesheet" href="css/nativedroid2.css" />
   <link rel="stylesheet" href="css/eedomus.mobile.css" />
@@ -238,7 +239,7 @@
 <div data-role="page" id="video_page" data-title="eedomus">
 
   <div data-role="header" data-position="fixed" data-tap-toggle="false">
-    <h1 id="video_header" data-translate="true">&nbsp;</h1>
+    <h1 id="video_header" data-translate="true">Vidéo</h1>
     <a href="#" class="ui-btn ui-btn-left" data-rel="back"><i class="zmdi zmdi-arrow-back"></i></a>
   </div>
 
@@ -249,14 +250,12 @@
 
     <p style="text-align:center">
       <!--a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="chose_date" href="#">Choisir une date</a-->
-      <a href="#popup_date" id="chose_date" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline">
-        Choisir une date
-      </a>
+      <a href="#popup_date" id="chose_date" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline waves-effect .waves-circle">Choisir une date</a>
       <a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="generate" href="#">Générer</a>
 
       <div data-role="popup" id="popup_date" class="ui-corner-all">
         <p>Date: </p>
-        <input type="date" id="my_date" class="ui-btn-inline" placeholder="aaaa-mm-jj" value=""/>
+        <input type="text" id="my_date" class="ui-btn-inline" placeholder="aaaa-mm-jj" value=""/>
 
         <a href="#" id="valide_date" class="ui-btn ui-btn-inline">Valider</a>
       </div>
@@ -524,7 +523,7 @@
 <script src="js/winstore-jscompat.js"></script>
 <script src="js/fastclick.js"></script>
 <script src="js/jquery.min.js"></script>
-<script src="js/jquery-ui.min.js"></script>
+<script src="js/jquery-ui.js"></script>
 <script src="js/jquery.form.min.js"></script>
 <script src="js/waves.min.js"></script>
 <script src="js/wow.min.js"></script>
@@ -533,8 +532,6 @@
 <script src="js/highcharts.js"></script>
 <script src="js/functions.js"></script>
 <script src="js/polling.js"></script>
-<script src="js/jquery.ajax-cross-origin.min.js"></script>
-
 <script src="js/index.js"></script>
 <script src="js/jquery.mobile.min.js"></script>
 <script src="js/nativedroid2.js"></script>
