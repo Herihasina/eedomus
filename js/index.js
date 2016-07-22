@@ -393,7 +393,7 @@ function init()
         if (filter_mvt == 2)
         {
           id_camera = $(this).data('controller-id');
-          //build_history(controller_module_id, filter_mvt);
+          // build_history(controller_module_id, filter_mvt);
         }
         else
         {
@@ -1713,7 +1713,6 @@ function build_history (controller_module_id, filter_mvt, polling)
       title = _('Mouvements');
     }
     title = getName(periph.controller_module_id, true)+' ('+title+')';
-
     $('#history_header').html(title); 
     $('#video_header').html(title);
     
@@ -2921,6 +2920,20 @@ $(document).on('pagebeforeshow','#video_page',function(){
   $.datepicker.setDefaults($.datepicker.regional['fr']);
   //end translation of dates
 
+  // change date default format with -
+  Date.prototype.yyyymmddwith = function() {
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth()+1).toString(); 
+    var dd  = this.getDate().toString();
+    return yyyy +'-'+ (mm[1]?mm:"0"+mm[0]) +'-'+ (dd[1]?dd:"0"+dd[0]);
+  };
+  var current_day = new Date();
+
+  $('#video_read, #video-indication').empty();
+   $('#generate, #chose_date').fadeIn('fast');
+   $('#video_header').html( getName(id_camera,true) );
+   $('#my_date').val( current_day.yyyymmddwith() );
+
   $('#my_date').datepicker({
     maxDate: new Date()
   });   
@@ -2937,27 +2950,8 @@ $('#valide_date').on('click',function()
     $('#video_read').empty(); 
     var now = $('#my_date').val();
 
-    if ( now != "") {
-        get_date = now.replace('-','');
-         get_date = get_date.replace('-',''); console.log('nifidy :'+ get_date);
-
-    }else{ // use current date if user didn't choose date
-
-        
-      Date.prototype.yyyymmdd = function() {
-        var yyyy = this.getFullYear().toString();
-        var mm = (this.getMonth()+1).toString(); 
-        var dd  = this.getDate().toString();
-        return yyyy + (mm[1]?mm:"0"+mm[0]) + (dd[1]?dd:"0"+dd[0]);
-      };
-
-      new_format = new Date(); 
-      get_date =  new_format.yyyymmdd();
-      console.log('Tsy nifidy :'+ get_date);
-    }
-    
-   
-    
+    get_date = now.replace('-','');
+    get_date = get_date.replace('-',''); 
     
     
     $.ajax({
@@ -2969,6 +2963,8 @@ $('#valide_date').on('click',function()
       },
       success: function(data_success){
         $('#video_read').html(data_success.msg);
+        var video_indication = getName(id_camera,true) + '<br>' + now + '<br>La génération de vidéo donne un aperçu de la journée sous forme de film.';
+        $('#video-indication').html(video_indication);
         var video_loaded = '';
         
         //load video 
@@ -2984,7 +2980,7 @@ $('#valide_date').on('click',function()
               hide_loading();
               $('#video_read').empty(); 
               
-                if (data_load_video.status_id != 1){
+                if (data_load_video.status_id != 1 && data_load_video.status_id != 0){
 
                       // video en cours
                       if (data_load_video.status_id == 2)
@@ -3003,6 +2999,10 @@ $('#valide_date').on('click',function()
                           video_loaded +=     'lecture camera';
                           video_loaded +=  '</video>';
                           $('#generate, #chose_date').fadeOut('fast');
+                          $('#video-indication').empty();
+                          $('#video_header')
+                            .empty()
+                            .html( getName(id_camera,true) +' (Vidéo)');
                           $('#video_read').append(video_loaded);
                         }
 
@@ -3010,6 +3010,7 @@ $('#valide_date').on('click',function()
                         if (data_load_video.status_id == 3)
                         {  
                           $('#video_read').html(data_load_video.msg);
+                          $('#video-indication').empty();
                         }
                       }
                 }

@@ -611,13 +611,9 @@
   text-align: center;
 }
 #chose_date,
-#generate,
 #valide_date{
   background: #888;
   color: #fff;
-}
-#chose_date{
-  margin-right: 20px;
 }
 #my_date{
   text-align: center;
