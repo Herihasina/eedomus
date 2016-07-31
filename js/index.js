@@ -245,7 +245,7 @@ function init()
 	$('#nav_panel a[href="#restart_drivers"]').on('click', restart_drivers); // NXP IOT
   $('#nav_panel a[href="#logout"]').on('click', logout);
   $('#nav_panel a[href="#notifications_page"]').on('click', build_notifications);
-  //click sur favoris azerty
+  //click sur favoris 
   $('a[href="#favorite_page"]').on('click', build_widgets);
 
   $('a[href="#edit_favorite_page"]').on('click', build_edit_favorite);
@@ -390,10 +390,9 @@ function init()
       var filter_mvt = $(this).data('filter-mvt');
       if (typeof filter_mvt != 'undefined')
       {
-        if (filter_mvt == 2)
+        if (filter_mvt == 2) // filter_mvt = 2 is for the camera video
         {
           id_camera = $(this).data('controller-id');
-          // build_history(controller_module_id, filter_mvt);
         }
         else
         {
@@ -989,7 +988,7 @@ function build_panels()
   Waves.init();
 }
 
-// Build Widgets  azerty
+// Build Widgets  
 function build_widgets(panel_id)
 {
       
@@ -1449,9 +1448,10 @@ function build_periph(controller_module_id)
     	var ar = getCamUrl(controller_module_id);
 			var cam_image = ar[0];
 			var cam_url = ar[1];
-
+      //window.localStorage.getItem("authentication");
+      window.localStorage.setItem('controller_module_id_carema',periph.controller_module_id)
       var div = '<li class="camera_card"><div class="nd2-card">';
-      div += '<div class="card-title has-supporting-text">';
+      div += '<div class="card-title has-superiph.controller_module_idpporting-text">';
       div += '<h3 class="card-primary-title">'+getName(periph.controller_module_id, show_utilisation, show_room)+' ('+_('Direct')+')</h3>';
       div += '</div>';
 
@@ -1616,7 +1616,7 @@ function build_graph(controller_module_id, tab, polling)
 
   var periph = periphs[controller_module_id];
 	if (typeof(periph) == 'undefined') { return; }
-
+  console.log(controller_module_id+'123');
   $('#history_page').data('controller-id', controller_module_id);
   $('#history_header').html(getName(controller_module_id, false, false));
 
@@ -1678,7 +1678,7 @@ function build_graph(controller_module_id, tab, polling)
 }
 
 // Build History
-function build_history (controller_module_id, filter_mvt, polling)
+function build_history (controller_module_id, filter_mvt, polling, start_date)
 { 
   $("[data-role='nd2tabs']").tabs('switchTabWithoutTransition', $("li[data-tab='history']"), 'history', 0);
 
@@ -1712,7 +1712,7 @@ function build_history (controller_module_id, filter_mvt, polling)
     {
       title = _('Mouvements');
     }
-    title = getName(periph.controller_module_id, true)+' ('+title+')';
+    title = getName(periph.controller_module_id, true)+' ('+title+')';  
     $('#history_header').html(title); 
     $('#video_header').html(title);
     
@@ -1721,7 +1721,7 @@ function build_history (controller_module_id, filter_mvt, polling)
   show_loading();
 
   var onSuccess = function(data) {
-
+    console.log(data);
     $.each(data.lines, function(index, line) {
       if (is_camera)
       {
@@ -1781,19 +1781,40 @@ function build_history (controller_module_id, filter_mvt, polling)
     }
   }
 
-  $.ajax({
-    url: 'json/periph_histo.php',
-    data: {
-      controller_module_id: controller_module_id,
-      start: start,
-      limit: limit,
-      filter_mvt: filter_mvt,
-      sort: 'value_time',
-      dir: 'DESC'
-    },
-    success: onSuccess,
-    complete: hide_loading
-  });
+  if(!start_date)
+  {
+    $.ajax({
+      url: 'json/periph_histo.php',
+      data: {
+        controller_module_id: controller_module_id,
+        start: start,
+        limit: limit,
+        filter_mvt: filter_mvt,
+        sort: 'value_time',
+        dir: 'DESC'
+      },
+      success: onSuccess,
+      complete: hide_loading
+    });
+  }
+  else
+  {
+    //history with filter
+    $.ajax({
+      url: 'json/periph_histo.php',
+      data: {
+        controller_module_id: controller_module_id,
+        start: start,
+        limit: limit,
+        filter_mvt: filter_mvt,
+        sort: 'value_time',
+        dir: 'DESC',
+        start_date : start_date
+      },
+      success: onSuccess,
+      complete: hide_loading
+    })
+  }
 }
 
 // Change user
@@ -2920,19 +2941,19 @@ $(document).on('pagebeforeshow','#video_page',function(){
   $.datepicker.setDefaults($.datepicker.regional['fr']);
   //end translation of dates
 
-  // change date default format with -
+  /*// change date default format with -
   Date.prototype.yyyymmddwith = function() {
     var yyyy = this.getFullYear().toString();
     var mm = (this.getMonth()+1).toString(); 
     var dd  = this.getDate().toString();
     return yyyy +'-'+ (mm[1]?mm:"0"+mm[0]) +'-'+ (dd[1]?dd:"0"+dd[0]);
-  };
+  };*/
   var current_day = new Date();
 
   $('#video_read, #video-indication').empty();
-   $('#generate, #chose_date').fadeIn('fast');
-   $('#video_header').html( getName(id_camera,true) );
-   $('#my_date').val( current_day.yyyymmddwith() );
+  $('#chose_date').fadeIn('fast');
+  $('#video_header').html( getName(id_camera,true) );
+  $('#my_date').val( current_day.yyyymmddwith() );
 
   $('#my_date').datepicker({
     maxDate: new Date()
@@ -2998,7 +3019,7 @@ $('#valide_date').on('click',function()
                           video_loaded +=  '<video src="https://'+ video_url_download+'" width=640 height=360 type="video/mp4" controls autoplay="true">'
                           video_loaded +=     'lecture camera';
                           video_loaded +=  '</video>';
-                          $('#generate, #chose_date').fadeOut('fast');
+                          $('#chose_date').fadeOut('fast');
                           $('#video-indication').empty();
                           $('#video_header')
                             .empty()
@@ -3031,3 +3052,68 @@ $('#valide_date').on('click',function()
     return false;
   }
 );
+
+
+//= = = = = = = = = = = history  
+$('a[href="#search_history"]').on('click', function () {
+    $('#search_history').find('.ui-input-text').removeClass('ui-input-text');
+
+    $('#search_history').removeClass('hide_search_history').addClass('show_search_history')
+
+    var current_day = new Date();
+    $('#id_date').text( 'Jusqu\'à: '+ current_day.yyyymmddwith() );
+  });
+
+// change date default format with -
+Date.prototype.yyyymmddwith = function() {
+  var yyyy = this.getFullYear().toString();
+  var mm = (this.getMonth()+1).toString(); 
+  var dd  = this.getDate().toString();
+  return yyyy +'-'+ (mm[1]?mm:"0"+mm[0]) +'-'+ (dd[1]?dd:"0"+dd[0]);
+};
+
+$('#date_pick_history').on('click', function(){
+  //Use French date
+  $.datepicker.regional['fr'] = {clearText: 'Effacer', clearStatus: '',
+    monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin',
+    'Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+    monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun',
+    'Jul','Aoû','Sep','Oct','Nov','Déc'],
+    monthStatus: 'Voir un autre mois', yearStatus: 'Voir un autre année',
+    weekHeader: 'Sm', weekStatus: '',
+    dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+    dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
+    dayNamesMin: ['D','L','M','M','J','V','S'],
+    dateFormat:"yy-mm-dd",
+
+    firstDay: 1, isRTL: false};
+  $.datepicker.setDefaults($.datepicker.regional['fr']);
+  //end translation of dates
+
+  var current_day = new Date();
+
+   $('#date_pick_history').fadeIn('fast');
+
+  $('#my_date_history').datepicker({
+    maxDate: new Date()
+  });   
+
+});
+
+$('#valider_history').on('click', function(){
+  $('#history_list').empty(); //2016-07-13 16:3' 
+
+  var date_history = $('#my_date_history').val();
+  var hh_history = '0';
+  var mm_history = '0';
+  var start_date_history = '0:0';
+  hh_history = $('#my_hh_history').val();
+  hh_history.charAt(0) == '0' ? hh_history = hh_history.charAt(1) : '';
+
+  mm_history = $('#my_mm_history').val();
+  mm_history.charAt(0) == '0' ? mm_history = mm_history.charAt(1) : '';
+
+  start_date_history = date_history +' ' + hh_history + ':' + mm_history;
+  var ctrl_mod_id_camera = window.localStorage.getItem('controller_module_id_carema');
+  build_history(ctrl_mod_id_camera, 0, true, start_date_history)
+});
