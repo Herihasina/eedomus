@@ -397,6 +397,7 @@ function init()
         else
         {
           $('ul[data-role="nd2tabs"]').hide();
+          $('#ruban_search_history').removeClass('show_search_history').addClass('hide_search_history')
           build_history(controller_module_id, filter_mvt);
         }
       }
@@ -1459,7 +1460,7 @@ function build_periph(controller_module_id)
       div += '<div class="card-action">';
       div +=    '<a href="#video_page" data-filter-mvt="2" data-controller-id="'+periph.controller_module_id+'" id="camera_'+periph.controller_module_id+'" class="ui-btn ui-btn-inline">Vidéo</a>';
       div +=    '<a href="#history_page" data-filter-mvt="1" data-controller-id="'+periph.controller_module_id+'" class="ui-btn ui-btn-inline">'+_('Historique des mouvements')+'</a>';
-      div +=    '<a href="#history_page" data-filter-mvt="0" data-controller-id="'+periph.controller_module_id+'" class="ui-btn ui-btn-inline">'+_('Historique complet')+'</a>';
+      div +=    '<a href="#history_page" data-filter-mvt="0" data-controller-id="'+periph.controller_module_id+'" class="ui-btn ui-btn-inline" id="mvt0">'+_('Historique complet')+'</a>';
       div += '</div>';
       div += '</div></div></li>';
       $('#periph_list').append(div);
@@ -3054,66 +3055,70 @@ $('#valide_date').on('click',function()
 );
 
 
-//= = = = = = = = = = = history  
-$('a[href="#search_history"]').on('click', function () {
-    $('#search_history').find('.ui-input-text').removeClass('ui-input-text');
+//= = = = = = = = = = = history  a href="#history_page" data-filter-mvt="0"
+$(document).on('pagebeforeshow','#history_page',function(){
+  $('#search_history').on('tap', function () {
+    $('#ruban_search_history').find('.ui-input-text').removeClass('ui-input-text');
 
-    $('#search_history').removeClass('hide_search_history').addClass('show_search_history')
+    $('#ruban_search_history').removeClass('hide_search_history').addClass('show_search_history')
 
     var current_day = new Date();
     $('#id_date').text( 'Jusqu\'à: '+ current_day.yyyymmddwith() );
   });
 
-// change date default format with -
-Date.prototype.yyyymmddwith = function() {
-  var yyyy = this.getFullYear().toString();
-  var mm = (this.getMonth()+1).toString(); 
-  var dd  = this.getDate().toString();
-  return yyyy +'-'+ (mm[1]?mm:"0"+mm[0]) +'-'+ (dd[1]?dd:"0"+dd[0]);
-};
-
-$('#date_pick_history').on('click', function(){
-  //Use French date
-  $.datepicker.regional['fr'] = {clearText: 'Effacer', clearStatus: '',
-    monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin',
-    'Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
-    monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun',
-    'Jul','Aoû','Sep','Oct','Nov','Déc'],
-    monthStatus: 'Voir un autre mois', yearStatus: 'Voir un autre année',
-    weekHeader: 'Sm', weekStatus: '',
-    dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-    dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
-    dayNamesMin: ['D','L','M','M','J','V','S'],
-    dateFormat:"yy-mm-dd",
-
-    firstDay: 1, isRTL: false};
-  $.datepicker.setDefaults($.datepicker.regional['fr']);
-  //end translation of dates
-
-  var current_day = new Date();
-
-   $('#date_pick_history').fadeIn('fast');
-
-  $('#my_date_history').datepicker({
-    maxDate: new Date()
-  });   
-
+  
 });
 
-$('#valider_history').on('click', function(){
-  $('#history_list').empty(); //2016-07-13 16:3' 
+  // change date default format with -
+  Date.prototype.yyyymmddwith = function() {
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth()+1).toString(); 
+    var dd  = this.getDate().toString();
+    return yyyy +'-'+ (mm[1]?mm:"0"+mm[0]) +'-'+ (dd[1]?dd:"0"+dd[0]);
+  };
 
-  var date_history = $('#my_date_history').val();
-  var hh_history = '0';
-  var mm_history = '0';
-  var start_date_history = '0:0';
-  hh_history = $('#my_hh_history').val();
-  hh_history.charAt(0) == '0' ? hh_history = hh_history.charAt(1) : '';
+  $('#date_pick_history').on('click', function(){
+    //Use French date
+    $.datepicker.regional['fr'] = {clearText: 'Effacer', clearStatus: '',
+      monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin',
+      'Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+      monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun',
+      'Jul','Aoû','Sep','Oct','Nov','Déc'],
+      monthStatus: 'Voir un autre mois', yearStatus: 'Voir un autre année',
+      weekHeader: 'Sm', weekStatus: '',
+      dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+      dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
+      dayNamesMin: ['D','L','M','M','J','V','S'],
+      dateFormat:"yy-mm-dd",
 
-  mm_history = $('#my_mm_history').val();
-  mm_history.charAt(0) == '0' ? mm_history = mm_history.charAt(1) : '';
+      firstDay: 1, isRTL: false};
+    $.datepicker.setDefaults($.datepicker.regional['fr']);
+    //end translation of dates
 
-  start_date_history = date_history +' ' + hh_history + ':' + mm_history;
-  var ctrl_mod_id_camera = window.localStorage.getItem('controller_module_id_carema');
-  build_history(ctrl_mod_id_camera, 0, true, start_date_history)
-});
+    var current_day = new Date();
+
+     $('#date_pick_history').fadeIn('fast');
+
+    $('#my_date_history').datepicker({
+      maxDate: new Date()
+    });   
+
+  });
+
+  $('#valider_history').on('click', function(){
+    $('#history_list').empty(); //2016-07-13 16:3' 
+
+    var date_history = $('#my_date_history').val();
+    var hh_history = '0';
+    var mm_history = '0';
+    var start_date_history = '0:0';
+    hh_history = $('#my_hh_history').val();
+    hh_history.charAt(0) == '0' ? hh_history = hh_history.charAt(1) : '';
+
+    mm_history = $('#my_mm_history').val();
+    mm_history.charAt(0) == '0' ? mm_history = mm_history.charAt(1) : '';
+
+    start_date_history = date_history +' ' + hh_history + ':' + mm_history;
+    var ctrl_mod_id_camera = window.localStorage.getItem('controller_module_id_carema');
+    build_history(ctrl_mod_id_camera, 0, true, start_date_history)
+  });

@@ -399,9 +399,9 @@
 
 /* custom style */
 .menu-header-search {
-  transform: translateX(-60px);
-  -webkit-transform: translateX(-60px);
-  -moz-transform: translateX(-60px);
+  transform: translateX(-30px);
+  -webkit-transform: translateX(-30px);
+  -moz-transform: translateX(-30px);
 }
 
 /* Modification page */
@@ -647,7 +647,7 @@
 .show_search_history{
   padding: 5px;
   display: block;
-  background-color:#e88f0f;
+  background-color:#FAC026; 
   height: 40px;
 }
 

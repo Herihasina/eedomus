@@ -120,7 +120,6 @@
   <div data-role="header" data-position="fixed" data-tap-toggle="false">
     <h1 id="widgets_header">&nbsp;</h1>
     <a href="#" class="ui-btn ui-btn-left" id="to-home"><i class="zmdi zmdi-arrow-back"></i></a>
-    <!-- favorite_page #menu_favoris 222222-->
     <a href="#menu_favoris" class="ui-btn ui-btn-right"><i class="zmdi zmdi-star-border"></i></a>
     <a href="#menu-panel" class="ui-btn ui-btn-right menu-header-widget"><i class="zmdi zmdi-menu"></i></a>
     <a href="#" class="ui-btn ui-btn-right lan-icon"></a>
@@ -194,11 +193,23 @@
 <!-- Graph page -->
 <div data-role="page" id="history_page" data-title="eedomus">
 
+  <!-- right menu -->
+  <div data-role="panel" data-position="right" data-display="overlay" data-position-fixed="true" data-theme="a" id="menu_search_history">
+    <ul data-role="listview" data-inset="false">      
+        <li>
+          <!--zmdi zmdi-search-in-file-->
+          <a href="#" id="search_history"><i class="zmdi zmdi-search"></i>&nbsp;&nbsp;<span data-translate="true">Recherche</span>
+          </a>
+        </li>
+    </ul>
+  </div>
+
   <div data-role="header" data-position="fixed" data-tap-toggle="false">
     <h1 id="history_header">&nbsp;</h1>
     <a href="#" class="ui-btn ui-btn-left" data-rel="back"><i class="zmdi zmdi-arrow-back"></i></a>
     <a href="#favorite_page" class="ui-btn ui-btn-right"><i class="zmdi zmdi-star-border"></i></a>
-    <a href="#" class="ui-btn ui-btn-right menu-header-widget"><i class="zmdi zmdi-menu"></i></a>
+    <!--a href="#" class="ui-btn ui-btn-right menu-header-widget"><i class="zmdi zmdi-menu"></i></a-->
+    <a href="#menu_search_history" class="ui-btn ui-btn-right menu-header-search"><i class="zmdi zmdi-menu"></i></a>
     <a href="#" class="ui-btn ui-btn-right lan-icon"></a>
 
     <ul data-role="nd2tabs" data-swipe="true">
@@ -209,6 +220,38 @@
       <li data-tab="4months" data-translate="true">4 mois</li>
       <li data-tab="1year" data-translate="true">1 an</li>
     </ul>
+
+    <div id="ruban_search_history" class="hide_search_history">
+
+      <div id="date_pick_history">
+        <div class="input_date">
+          <input style="height: 31px; width:100px;" type="text" id="my_date_history" class="ui-btn-inline" placeholder="aaaa-mm-jj" value=""/>
+        </div>
+        <div class="label_hhmm">
+          <span >hh</span>
+        </div>
+      </div>
+
+      <div class="input_hhmm" >
+        <input style="height: 31px; margin-right:10px; width:40px;" type="number" id="my_hh_history" class="ui-btn-inline" placeholder="hh" value="00" min="00" max="23"/>
+      </div>
+
+      <div class="label_hhmm">
+        <span >mm</span>
+      </div>
+      <div class="input_hhmm">
+        <input style="height: 31px; margin-right:10px; width:40px;" type="number" id="my_mm_history" class="ui-btn-inline" placeholder="mm" value="00" min="00" max="59"/>
+      </div>
+
+      <div class="valider_date_history">
+        <a href="#" id="valider_history" class="ui-btn ui-btn-inline">Valider</a>
+      </div>
+
+      <div class="label_date">
+        <span id="id_date">&ndsp;</span>
+      </div>
+    </div>
+
   </div>
 
   <div class="ui-content">
@@ -236,6 +279,12 @@
 
 
 <!-- video page -->
+
+
+<!-- video page -->
+
+
+<!-- video page -->
 <div data-role="page" id="video_page" data-title="eedomus">
 
   <div data-role="header" data-position="fixed" data-tap-toggle="false">
@@ -249,10 +298,9 @@
     </p>
     <p id="video-indication" style="text-align:center"></p>
     <p style="text-align:center">
-      <!--a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="chose_date" href="#">Choisir une date</a-->
+      
       <a href="#popup_date" id="chose_date" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline waves-effect .waves-circle">Choisir une date</a>
-      <!-- <a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="generate" href="#">Générer</a> -->
-
+      
       <div data-role="popup" id="popup_date" class="ui-corner-all">
         <p>Date: </p>
         <input type="text" id="my_date" class="ui-btn-inline" placeholder="aaaa-mm-jj" value=""/>
