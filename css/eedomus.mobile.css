@@ -397,6 +397,13 @@
   -moz-transform: translateX(-30px);
 }
 
+/* custom style */
+.menu-header-search {
+  transform: translateX(-60px);
+  -webkit-transform: translateX(-60px);
+  -moz-transform: translateX(-60px);
+}
+
 /* Modification page */
 .fields,
 #modification-page .ui-select  {
@@ -631,3 +638,14 @@
 #popup_date .ui-input-search:after {
   display: none;
 }
+
+.hide_bandeau{
+  display: none;
+}
+
+.show_bandeau{
+  padding: 5px;
+  display: block;
+  background-color: #e99a00;
+}
+

@@ -245,7 +245,7 @@ function init()
 	$('#nav_panel a[href="#restart_drivers"]').on('click', restart_drivers); // NXP IOT
   $('#nav_panel a[href="#logout"]').on('click', logout);
   $('#nav_panel a[href="#notifications_page"]').on('click', build_notifications);
-  //click sur favoris azerty
+  //click sur favoris 
   $('a[href="#favorite_page"]').on('click', build_widgets);
 
   $('a[href="#edit_favorite_page"]').on('click', build_edit_favorite);
@@ -1616,7 +1616,7 @@ function build_graph(controller_module_id, tab, polling)
 
   var periph = periphs[controller_module_id];
 	if (typeof(periph) == 'undefined') { return; }
-
+  console.log(controller_module_id+'123');
   $('#history_page').data('controller-id', controller_module_id);
   $('#history_header').html(getName(controller_module_id, false, false));
 
@@ -1713,6 +1713,7 @@ function build_history (controller_module_id, filter_mvt, polling)
       title = _('Mouvements');
     }
     title = getName(periph.controller_module_id, true)+' ('+title+')';
+    console.log(title+'456')
     $('#history_header').html(title); 
     $('#video_header').html(title);
     
@@ -2902,7 +2903,8 @@ $(document).on('pagebeforeshow','#exclusion_zwave_page',function(){
 });
 
 // creation video_page and datepicker
-$(document).on('pagebeforeshow','#video_page',function(){
+var date_picker = function date_pick()
+{
   //Use French date
   $.datepicker.regional['fr'] = {clearText: 'Effacer', clearStatus: '',
     monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin',
@@ -2919,6 +2921,10 @@ $(document).on('pagebeforeshow','#video_page',function(){
     firstDay: 1, isRTL: false};
   $.datepicker.setDefaults($.datepicker.regional['fr']);
   //end translation of dates
+}
+
+$(document).on('pagebeforeshow','#video_page',function(){
+  date_picker;
 
   // change date default format with -
   Date.prototype.yyyymmddwith = function() {
@@ -3031,3 +3037,25 @@ $('#valide_date').on('click',function()
     return false;
   }
 );
+
+
+
+//= = = = = = = = = = = history   
+$('a[href="#search_history"]').on('click', function () {
+    $('#bandeau').removeClass('hide_bandeau').addClass('show_bandeau');
+    var maintenant = new Date();
+    var hh_actuel = maintenant.getHours();
+    var mm_actuel = maintenant.getMinutes();
+    $('#heur_dujour').text(hh_actuel + ':' + mm_actuel);
+  });
+  
+  // $('#bandeau').on('click', function () {
+  //   console.log('bando');
+  // });
+$(document).on('pagebeforeshow','#history_page',function(){
+    $('#datetimepicker').datebox({
+      mode: "timebox",
+      afterToday: true
+    });
+});
+
