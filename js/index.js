@@ -51,6 +51,8 @@ var temp = {};
  var longs = [];
 var conts = [];
 
+var is_capteur = false;
+
 if (webapp_mode == 'wan' && window.location.href.match(/^https:\/\/.*\.eedomus\.com/))
 {
   // direct calls on wan/lan webserver
@@ -299,6 +301,7 @@ function init()
   $('#widgets_list, #favorite_list').on('click', 'a', function()
 	{
 		var controller_module_id = $(this).data('controller-id');
+
 		// data-page-to : complexe mecanism to avoid href default when "sub widget" is clicked
 		if (typeof(window.clicked_page_to) != 'undefined')
 		{
@@ -307,7 +310,9 @@ function init()
 			window.clicked_controller_module_id = undefined;
 		}
 		else
-		{
+		{ 
+      
+      window.localStorage.setItem('controller_module_id_capteur',controller_module_id); //need this to build history
 			var widget_id = $(this).data('widget-id'); // if wizard
 			widget_clicked(controller_module_id, widget_id, $(this).data('page-to'));
 		}
@@ -397,7 +402,7 @@ function init()
         else
         {
           $('ul[data-role="nd2tabs"]').hide();
-          $('#ruban_search_history').removeClass('show_search_history').addClass('hide_search_history')
+          $('#ruban_search_history').removeClass('show_search_history').addClass('hide_search_history');
           build_history(controller_module_id, filter_mvt);
         }
       }
@@ -1450,7 +1455,7 @@ function build_periph(controller_module_id)
 			var cam_image = ar[0];
 			var cam_url = ar[1];
       //window.localStorage.getItem("authentication");
-      window.localStorage.setItem('controller_module_id_carema',periph.controller_module_id)
+      window.localStorage.setItem('controller_module_id_carema',periph.controller_module_id);
       var div = '<li class="camera_card"><div class="nd2-card">';
       div += '<div class="card-title has-superiph.controller_module_idpporting-text">';
       div += '<h3 class="card-primary-title">'+getName(periph.controller_module_id, show_utilisation, show_room)+' ('+_('Direct')+')</h3>';
@@ -1617,7 +1622,7 @@ function build_graph(controller_module_id, tab, polling)
 
   var periph = periphs[controller_module_id];
 	if (typeof(periph) == 'undefined') { return; }
-  console.log(controller_module_id+'123');
+
   $('#history_page').data('controller-id', controller_module_id);
   $('#history_header').html(getName(controller_module_id, false, false));
 
@@ -1734,10 +1739,12 @@ function build_history (controller_module_id, filter_mvt, polling, start_date)
         div += '<div class="card-media"><img class="card-avatar" src="'+image_src+'"></div>';
         div += '</div></li>';
 
+        is_capteur = false;
+
         list.append(div);
       }
       else
-      {
+      { 
         var module_image = periph.default_image;
         var val = line.value;
 
@@ -1764,6 +1771,8 @@ function build_history (controller_module_id, filter_mvt, polling, start_date)
         li += '<img src="'+getHost()+'img/mdm/'+theme+'/'+module_image+'" class="ui-thumbnail" />';
         li += addWidgetDiv('<h2>'+val+'</h2><p class="widget_line_detail">'+getNiceDate(line.value_time)+'</p>');
         li += '</a></li>';
+
+        is_capteur = true;
 
         list.append(li);
       }
@@ -2181,7 +2190,7 @@ $(document).on('pagebeforeshow','#widgets_page',function(){
     $('#widgets_list > li > a')
       .removeClass('ui-icon-carat-r')
       .addClass('ui-icon-gear ui-nodisc-icon ui-alt-icon');
-    $('#menu-panel').panel('close');
+    $('#menu-panel').panel('close');   
 
     return false;
   });
@@ -2202,8 +2211,7 @@ $(document).on('pagebeforeshow','#widgets_page',function(){
       return;
   });
 
-
-  
+   
 });
 
 
@@ -3057,15 +3065,24 @@ $('#valide_date').on('click',function()
 
 //= = = = = = = = = = = history  a href="#history_page" data-filter-mvt="0"
 $(document).on('pagebeforeshow','#history_page',function(){
-  $('#search_history').on('tap', function () {
-    $('#ruban_search_history').find('.ui-input-text').removeClass('ui-input-text');
+  
+    $('#search_history').on('tap', function (e) {
+      $('#menu_search_history').panel('close');
+      if ( $('ul#history_list:visible').length  > 0 ){ //only in historique tab or historique complet videos
+          $('#ruban_search_history').find('.ui-input-text').removeClass('ui-input-text');
 
-    $('#ruban_search_history').removeClass('hide_search_history').addClass('show_search_history')
+          $('#ruban_search_history').removeClass('hide_search_history').addClass('show_search_history');
 
-    var current_day = new Date();
-    $('#id_date').text( 'Jusqu\'à: '+ current_day.yyyymmddwith() );
-  });
-
+          var current_day = new Date();
+          $('#id_date').text( 'Jusqu\'à: '+ current_day.yyyymmddwith() );
+      }else{
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();        
+        return false;
+      }
+      
+    });
   
 });
 
@@ -3119,6 +3136,21 @@ $(document).on('pagebeforeshow','#history_page',function(){
     mm_history.charAt(0) == '0' ? mm_history = mm_history.charAt(1) : '';
 
     start_date_history = date_history +' ' + hh_history + ':' + mm_history;
-    var ctrl_mod_id_camera = window.localStorage.getItem('controller_module_id_carema');
-    build_history(ctrl_mod_id_camera, 0, true, start_date_history)
+
+    $('#ruban_search_history')
+      .addClass('hide_search_history')
+      .removeClass('show_search_history');
+
+      if (is_capteur){ console.log('capteur');
+        build_history( window.localStorage.getItem('controller_module_id_capteur'), 0, true, start_date_history );
+      }else{console.log('camera');
+        var ctrl_mod_id_camera = window.localStorage.getItem('controller_module_id_carema');
+        build_history(ctrl_mod_id_camera, 0, true, start_date_history);
+      }
+    is_capteur = false;
+
+
+    
+   
+    
   });
