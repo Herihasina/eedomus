@@ -3065,7 +3065,7 @@ $('#valide_date').on('click',function()
 
 //= = = = = = = = = = = history  a href="#history_page" data-filter-mvt="0"
 $(document).on('pagebeforeshow','#history_page',function(){
-  
+    $('#ruban_search_history').addClass('hide_search_history').removeClass('show_search_history');
     $('#search_history').on('tap', function (e) {
       $('#menu_search_history').panel('close');
       if ( $('ul#history_list:visible').length  > 0 ){ //only in historique tab or historique complet videos
@@ -3137,20 +3137,13 @@ $(document).on('pagebeforeshow','#history_page',function(){
 
     start_date_history = date_history +' ' + hh_history + ':' + mm_history;
 
-    $('#ruban_search_history')
-      .addClass('hide_search_history')
-      .removeClass('show_search_history');
-
       if (is_capteur){ console.log('capteur');
-        build_history( window.localStorage.getItem('controller_module_id_capteur'), 0, true, start_date_history );
+        build_history( window.localStorage.getItem('controller_module_id_capteur'), 0 true, start_date_history );
       }else{console.log('camera');
         var ctrl_mod_id_camera = window.localStorage.getItem('controller_module_id_carema');
         build_history(ctrl_mod_id_camera, 0, true, start_date_history);
       }
+
     is_capteur = false;
-
-
-    
-   
     
   });
