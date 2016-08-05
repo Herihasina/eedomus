@@ -3067,6 +3067,9 @@ $('#valide_date').on('click',function()
 $(document).on('pagebeforeshow','#history_page',function(){
     $('#ruban_search_history').addClass('hide_search_history').removeClass('show_search_history');
     $('#search_history').on('tap', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
       $('#menu_search_history').panel('close');
       if ( $('ul#history_list:visible').length  > 0 ){ //only in historique tab or historique complet videos
           $('#ruban_search_history').find('.ui-input-text').removeClass('ui-input-text');
@@ -3075,27 +3078,13 @@ $(document).on('pagebeforeshow','#history_page',function(){
 
           var current_day = new Date();
           $('#id_date').text( 'Jusqu\'à: '+ current_day.yyyymmddwith() );
-      }else{
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();        
+      }else{       
         return false;
       }
       
     });
-  
-});
 
-  // change date default format with -
-  Date.prototype.yyyymmddwith = function() {
-    var yyyy = this.getFullYear().toString();
-    var mm = (this.getMonth()+1).toString(); 
-    var dd  = this.getDate().toString();
-    return yyyy +'-'+ (mm[1]?mm:"0"+mm[0]) +'-'+ (dd[1]?dd:"0"+dd[0]);
-  };
-
-  $('#date_pick_history').on('click', function(){
-    //Use French date
+       //Use French date
     $.datepicker.regional['fr'] = {clearText: 'Effacer', clearStatus: '',
       monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin',
       'Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
@@ -3110,19 +3099,54 @@ $(document).on('pagebeforeshow','#history_page',function(){
 
       firstDay: 1, isRTL: false};
     $.datepicker.setDefaults($.datepicker.regional['fr']);
-    //end translation of dates
-
-    var current_day = new Date();
-
-     $('#date_pick_history').fadeIn('fast');
 
     $('#my_date_history').datepicker({
       maxDate: new Date()
-    });   
+    });  
+  
+});
 
-  });
+  // change date default format with -
+  Date.prototype.yyyymmddwith = function() {
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth()+1).toString(); 
+    var dd  = this.getDate().toString();
+    return yyyy +'-'+ (mm[1]?mm:"0"+mm[0]) +'-'+ (dd[1]?dd:"0"+dd[0]);
+  };
 
-  $('#valider_history').on('click', function(){
+  // $('#date_pick_history').on('tap', function(){
+  //   //Use French date
+  //   $.datepicker.regional['fr'] = {clearText: 'Effacer', clearStatus: '',
+  //     monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin',
+  //     'Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+  //     monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun',
+  //     'Jul','Aoû','Sep','Oct','Nov','Déc'],
+  //     monthStatus: 'Voir un autre mois', yearStatus: 'Voir un autre année',
+  //     weekHeader: 'Sm', weekStatus: '',
+  //     dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+  //     dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
+  //     dayNamesMin: ['D','L','M','M','J','V','S'],
+  //     dateFormat:"yy-mm-dd",
+
+  //     firstDay: 1, isRTL: false};
+  //   $.datepicker.setDefaults($.datepicker.regional['fr']);
+  //   //end translation of dates
+
+  //   var current_day = new Date();
+
+  //    $('#date_pick_history').fadeIn('fast');
+
+  //   $('#my_date_history').datepicker({
+  //     maxDate: new Date()
+  //   });   
+
+  // });
+
+  $('#valider_history').on('click', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation(); 
+
     $('#history_list').empty(); //2016-07-13 16:3' 
 
     var date_history = $('#my_date_history').val();
@@ -3138,7 +3162,7 @@ $(document).on('pagebeforeshow','#history_page',function(){
     start_date_history = date_history +' ' + hh_history + ':' + mm_history;
 
       if (is_capteur){ console.log('capteur');
-        build_history( window.localStorage.getItem('controller_module_id_capteur'), 0 true, start_date_history );
+        build_history( window.localStorage.getItem('controller_module_id_capteur'), -1, true, start_date_history );
       }else{console.log('camera');
         var ctrl_mod_id_camera = window.localStorage.getItem('controller_module_id_carema');
         build_history(ctrl_mod_id_camera, 0, true, start_date_history);
