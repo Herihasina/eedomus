@@ -54,12 +54,12 @@
       <li data-role="list-divider"><span data-translate="true">Affichage</span></li>
       <li><a href="#home"><i class="zmdi zmdi-home"></i><span data-translate="true">Accueil</span></a></li>
       <li><a href="#notifications_page"><i class="zmdi zmdi-comment-text"></i><span data-translate="true">Notifications</span></a></li>
-      <li data-role="list-divider">Configuration</li>
+      <li data-role="list-divider"><span data-translate="true">Configuration</span></li>
      <!--  <li><a href="#terminal_parameters_page"><i class="zmdi zmdi-wrench"></i>Paramètres terminal</a></li>
       <li><a href="#zwave_page"><i class="zmdi zmdi-portable-wifi"></i>Réseau Z-Wave</a></li> zmdi-leak -->
-      <li><a href="#moncompte_page" id="id_moncompte"><i class="zmdi zmdi-account"></i>Mon compte</a></li>
-      <li><a href="#diag_page" id="id_diag"><i class="zmdi zmdi-info"></i>Diagnostic</a></li>
-      <li><a href="#zwave_page" id="id_reseau_zwave"><i class="zmdi zmdi-portable-wifi"></i>Réseau Z-Wave</a></li>
+      <li><a href="#moncompte_page" id="id_moncompte"><i class="zmdi zmdi-account"></i><span data-translate="true">Mon compte</span></a></li>
+      <li><a href="#diag_page" id="id_diag"><i class="zmdi zmdi-info"></i><span data-translate="true">Diagnostic</span></a></li>
+      <li><a href="#zwave_page" id="id_reseau_zwave"><i class="zmdi zmdi-portable-wifi"></i><span data-translate="true">Réseau Z-Wave</span></a></li>
       
       <li class="box-config" data-role="list-divider"><span data-translate="true">Box eedomus</span></li>
       <li class="box-config"><a href="/config" target="_blank"><i class="zmdi zmdi-settings"></i><span data-translate="true">Configuration réseau</span></a></li>
@@ -77,7 +77,7 @@
     <ul data-role="listview" data-inset="false">      
         <li><a href="#edit_favorite_page" id=""><i class="zmdi zmdi-edit"></i>&nbsp;&nbsp;<span data-translate="true">Modifier favoris</span></a></li>
     </ul> 
-    <strong>Favoris</strong>  
+    <strong><span data-translate="true">Favoris</span></strong>  
     <div id="favoris_panel_acc">
       
     </div>
@@ -110,7 +110,7 @@
     <ul data-role="listview" data-inset="false">      
         <li><a href="#edit_favorite_page" id="edit-entry-btn"><i class="zmdi zmdi-edit"></i>&nbsp;&nbsp;<span data-translate="true">Modifier favoris</span></a></li>
     </ul> 
-    <strong>Favoris</strong>  
+    <strong><span data-translate="true">Favoris</span></strong>  
     <div id="favoris_panel">
       
     </div>
@@ -134,21 +134,21 @@
 <!-- Modification/Edit page -->
 <div data-role="page" id="modification-page" data-title="eedomus">
   <div data-role='header' data-position="fixed">
-    <h1>Modifier</h1>
+    <h1><span data-translate="true">Modifier</span></h1>
     <a id="back-btn" href="#widgets_page" class="ui-btn ui-btn-left"><i class="zmdi zmdi-arrow-back"></i></a>
 
   </div>
   <div data-role='main' class="ui-content" style="position:relative">
     
   
-    <label for="textinput-6">Nom:</label>
+    <label for="textinput-6"><span data-translate="true">Nom</span>:</label>
     <input name="textinput-6" id="name-periph" placeholder="" value="" data-mini="true" type="text">
   
-    <label for="select-choice" class="select">Pièces:</label>
+    <label for="select-choice" class="select"><span data-translate="true">Pièces</span>:</label>
     <select name="select-choice" id="select-choice" data-native-menu="false"></select>
   
-    <button class="ui-btn ui-btn-inline" id="cancel-btn">Annuler</button>
-    <button class="ui-btn ui-btn-inline" id="accept-btn">Valider</button>
+    <button class="ui-btn ui-btn-inline" id="cancel-btn"><span data-translate="true">Annuler</span></button>
+    <button class="ui-btn ui-btn-inline" id="accept-btn"><span data-translate="true">Valider</span></button>
 
   </div>
 </div>
@@ -209,7 +209,7 @@
     <a href="#" class="ui-btn ui-btn-left" data-rel="back"><i class="zmdi zmdi-arrow-back"></i></a>
     <a href="#favorite_page" class="ui-btn ui-btn-right"><i class="zmdi zmdi-star-border"></i></a>
     <!--a href="#" class="ui-btn ui-btn-right menu-header-widget"><i class="zmdi zmdi-menu"></i></a-->
-    <a href="#menu_search_history" class="ui-btn ui-btn-right menu-header-search"><i class="zmdi zmdi-menu"></i></a>
+    <a href="#menu_search_history" class="ui-btn ui-btn-right menu-header-search" id="menu_search_history_trigger"><i class="zmdi zmdi-menu"></i></a>
     <a href="#" class="ui-btn ui-btn-right lan-icon"></a>
 
     <ul data-role="nd2tabs" data-swipe="true">
@@ -244,7 +244,7 @@
       </div>
 
       <div class="valider_date_history">
-        <a href="#" id="valider_history" class="ui-btn ui-btn-inline">Valider</a>
+        <a href="#" id="valider_history" class="ui-btn ui-btn-inline"><span data-translate="true">Valider</span></a>
       </div>
 
       <div class="label_date">
@@ -299,13 +299,13 @@
     <p id="video-indication" style="text-align:center"></p>
     <p style="text-align:center">
       
-      <a href="#popup_date" id="chose_date" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline waves-effect .waves-circle">Choisir une date</a>
+      <a href="#popup_date" id="chose_date" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline waves-effect .waves-circle" data-translate="true">Choisir une date</a>
       
       <div data-role="popup" id="popup_date" class="ui-corner-all">
-        <p>Date: </p>
+        <p><span data-translate="true">Date</span>: </p>
         <input type="text" id="my_date" class="ui-btn-inline" placeholder="aaaa-mm-jj" value=""/>
 
-        <a href="#" id="valide_date" class="ui-btn ui-btn-inline">Valider</a>
+        <a href="#" id="valide_date" class="ui-btn ui-btn-inline" data-translate="true">Valider</a>
       </div>
     </p>
   </div>
@@ -433,11 +433,11 @@
       <a href="#" class="ui-btn ui-btn-left" id="to-home-moncompte"><i class="zmdi zmdi-arrow-back"></i></a>
     </div>
     <div data-role="content" id="list-moncompte">  
-        <div><b>Utilisateur: </b></div>
+        <div><b><span data-translate="true">Utilisateur</span>: </b></div>
         <div id="id_user" class="moncompte_user">...&nbsp;</div>
-        <div><b>Type de compte: </b></div>
+        <div><b><span data-translate="true">Type de compte</span>: </b></div>
         <div id="id_account_type" class="moncompte_account_type">...&nbsp;</div>
-        <div><b>Expiration du service premium: </b></div>
+        <div><b><span data-translate="true">Expiration du service premium</span>: </b></div>
         <div id="id_expiration" class="moncompte_expiration">...&nbsp;</div>
     </div>
 </div>
@@ -451,10 +451,10 @@
     </div>
     <div data-role="content" id="list-diagnostic">  
         <ul data-role="listview">
-          <li id="network-connection" class="failed"><a href="#"><span></span>Connexion à un réseau</a></li>
-          <li id="eedomus-cloud" class="unknown"><a href="#"><span></span>Accès au Cloud eedomus</a></li>
-          <li id="box-cloud" class="unknown"><a href="#"><span></span>Connexion cloud <span class="box_name"></span></a></li>
-          <li id="box-lan" class="unknown"><a href="#"><span></span>Connexion local <span class="box_name"></span></a></li>
+          <li id="network-connection" class="failed"><a href="#"><span></span><span data-translate="true" class="no-bg rel-pos">Connexion à un réseau</span></a></li>
+          <li id="eedomus-cloud" class="unknown"><a href="#"><span></span><span data-translate="true" class="no-bg rel-pos">Accès au Cloud eedomus</span></a></li>
+          <li id="box-cloud" class="unknown"><a href="#"><span></span><span data-translate="true" class="no-bg rel-pos">Connexion cloud</span><span class="box_name"></span></a></li>
+          <li id="box-lan" class="unknown"><a href="#"><span></span><span data-translate="true" class="no-bg rel-pos">Connexion local</span><span class="box_name"></span></a></li>
         </ul>
     </div>
 </div>
@@ -484,7 +484,7 @@
     </div>
     <div data-role="content" id="" class="black-bg">       
       <p style="text-align:center">
-          Inclusion Z-Wave <span id="include_id_box"></span>
+          <span data-translate="true">Inclusion Z-Wave</span> <span id="include_id_box"></span>
       </p>
       <div id="content-inclusion-zwave">
         <!-- <p>
@@ -497,8 +497,8 @@
       </div> 
       
     <p style="text-align:center">
-      <a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="inclusion-launch" href="#">Démarrer l' Inclusion Z-Wave</a>
-      <a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="inclusion-cancel" href="#">Annuler</a>
+      <a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="inclusion-launch" href="#" data-translate="true">Démarrer l' Inclusion Z-Wave</a>
+      <a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="inclusion-cancel" href="#" data-translate="true">Annuler</a>
     </p>
     </div>
 </div>
@@ -511,18 +511,18 @@
       <a href="#" class="ui-btn ui-btn-left" id="to-home-exclusion-zwave"><i class="zmdi zmdi-arrow-back"></i></a>
     </div>
     <div data-role="content" id="" class="black-bg">       
-      <p style="text-align:center">
+      <p style="text-align:center" data-translate="true">
           Exclusion Z-Wave <span id="exclude_id_box"></span>
       </p>
       <div id="content-exclusion-zwave">
-        <p>
+        <p data-translate="true">
          Vous êtes sur le point d'exclure votre périphérique.
         </p>
       </div> 
       
     <p style="text-align:center">
-      <a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="exclusion-launch" href="#">Démarrer l' Exclusion Z-Wave</a>
-      <a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="to-home-excl" href="#">Annuler</a>
+      <a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="exclusion-launch" href="#" data-translate="true">Démarrer l' Exclusion Z-Wave</a>
+      <a class="ui-btn ui-btn-inline waves-effect .waves-circle" id="to-home-excl" href="#" data-translate="true">Annuler</a>
     </p>
     </div>
 </div>
@@ -536,15 +536,15 @@
     </div>
     <div data-role="content">
         <div id="map-wrap" style="width:100%;height:350px; margin-bottom: 5px; min-height:75vh;"></div>
-        <a href="#" id="locate-once" class="ui-btn ui-btn-inline">Localiser</a>
-        <a href="#interval" id="follow"data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline">Suivre</a>
-        <a href="#" id="not_follow"data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline">Ne plus suivre</a>
+        <a href="#" id="locate-once" class="ui-btn ui-btn-inline" data-translate="true">Localiser</a>
+        <a href="#interval" id="follow"data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline" data-translate="true">Suivre</a>
+        <a href="#" id="not_follow"data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-btn-inline" data-translate="true">Ne plus suivre</a>
         <div data-role="popup" id="interval" class="ui-corner-all" >
-           <p>Fréquence : (minutes)</p>
+           <p data-translate="true">Fréquence : (minutes)</p>
            <input type="number" step="1" min="1" max="60" id="freq" class="ui-btn-inline" value="1" />
-           <p>Durée : (minutes)</p>
+           <p data-translate="true">Durée : (minutes)</p>
            <input type="number" step="5" min="0" max="60" id="duree" class="ui-btn-inline" value="60" />
-           <a href="#" id="locate-more" class="ui-btn ui-btn-inline">Valider</a>
+           <a href="#" id="locate-more" class="ui-btn ui-btn-inline" data-translate="true">Valider</a>
         </div>
     </div>
 </div>

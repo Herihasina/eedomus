@@ -51,6 +51,53 @@ var temp = {};
  var longs = [];
 var conts = [];
 
+//Use FR date
+$.datepicker.regional['fr'] = {
+    clearText: 'Effacer', clearStatus: '',
+    monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin',
+    'Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+    monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun',
+    'Jul','Aoû','Sep','Oct','Nov','Déc'],
+    monthStatus: 'Voir un autre mois', yearStatus: 'Voir un autre année',
+    weekHeader: 'Sm', weekStatus: '',
+    dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+    dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
+    dayNamesMin: ['D','L','M','M','J','V','S'],
+    dateFormat:"yy-mm-dd",
+    firstDay: 1, isRTL: false
+  };
+
+  //Use ES date
+$.datepicker.regional['es'] = {
+    clearText: 'Effacer', clearStatus: '',
+    monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin',
+    'Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+    monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun',
+    'Jul','Aoû','Sep','Oct','Nov','Déc'],
+    monthStatus: 'Voir un autre mois', yearStatus: 'Voir un autre année',
+    weekHeader: 'Sm', weekStatus: '',
+    dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+    dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
+    dayNamesMin: ['D','L','M','M','J','V','S'],
+    dateFormat:"yy-mm-dd",
+    firstDay: 1, isRTL: false
+  };
+
+  //Use DE date
+$.datepicker.regional['de'] = {
+    clearText: 'Effacer', clearStatus: '',
+    monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin',
+    'Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+    monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun',
+    'Jul','Aoû','Sep','Oct','Nov','Déc'],
+    monthStatus: 'Voir un autre mois', yearStatus: 'Voir un autre année',
+    weekHeader: 'Sm', weekStatus: '',
+    dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+    dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
+    dayNamesMin: ['D','L','M','M','J','V','S'],
+    dateFormat:"yy-mm-dd",
+    firstDay: 1, isRTL: false
+  };
 var is_capteur = false;
 
 if (webapp_mode == 'wan' && window.location.href.match(/^https:\/\/.*\.eedomus\.com/))
@@ -1182,7 +1229,7 @@ function build_widgets(panel_id)
       div_geoloc +=   '<a href="#" class="to-full-map" id="'+temp.controller_geo_id+'" onclick="id_map = $(this).attr(\'id\');" data-page-to="#map-page">';
       div_geoloc +=     '<div class="card-media geomap" id="geomap'+id+'" style="width:100%;height:250px"></div>';
       div_geoloc +=   '</a>';
-      div_geoloc +=   '<div id = "coords_indisponible'+id+'" style="display:none;" >Coordonnées GPS indisponibles</div>';
+      div_geoloc +=   '<div id = "coords_indisponible'+id+'" style="display:none;" data-translate="true">Coordonnées GPS indisponibles</div>';
       div_geoloc += '</div></div></li>';
       
       list.append(div_geoloc);
@@ -1463,7 +1510,7 @@ function build_periph(controller_module_id)
 
       div += '<div class="card-media"><img id="direct_cam" class="card-avatar" src="'+cam_image+'" cam_url="'+cam_url+'"></a>';
       div += '<div class="card-action">';
-      div +=    '<a href="#video_page" data-filter-mvt="2" data-controller-id="'+periph.controller_module_id+'" id="camera_'+periph.controller_module_id+'" class="ui-btn ui-btn-inline">Vidéo</a>';
+      div +=    '<a href="#video_page" data-filter-mvt="2" data-controller-id="'+periph.controller_module_id+'" id="camera_'+periph.controller_module_id+'" class="ui-btn ui-btn-inline" data-translate="true">Vidéo</a>';
       div +=    '<a href="#history_page" data-filter-mvt="1" data-controller-id="'+periph.controller_module_id+'" class="ui-btn ui-btn-inline">'+_('Historique des mouvements')+'</a>';
       div +=    '<a href="#history_page" data-filter-mvt="0" data-controller-id="'+periph.controller_module_id+'" class="ui-btn ui-btn-inline" id="mvt0">'+_('Historique complet')+'</a>';
       div += '</div>';
@@ -1740,7 +1787,7 @@ function build_history (controller_module_id, filter_mvt, polling, start_date)
         div += '</div></li>';
 
         is_capteur = false;
-
+        $('[href=#menu_search_history]').fadeIn();
         list.append(div);
       }
       else
@@ -2497,7 +2544,22 @@ $(document).on('pagebeforeshow','#map-page', function() {
             //map: map, 
             position: new google.maps.LatLng(parseFloat(localStorage.lat), parseFloat(localStorage.lng))
       });
-    }else{alert('Coordonnées GPS indisponibles');}   
+    }else{
+      switch (lang){ 
+        case "en":
+          alert('GPS coordonates not available');
+        break;
+        case "es":
+          alert('GPS coordonates not available');
+        break;
+        case "de":
+          alert('GPS coordonates not available');
+        break;
+        default:
+          alert('Coordonnées GPS indisponibles');
+        break;
+      }
+    }   
   
     $('#interval').popup('close');
     
@@ -2549,7 +2611,22 @@ function full_map(latitude,longitude, send_location)
       latitude = typeof latitude !=='undefined' ? latitude : window.localStorage.lat ;
       longitude = typeof longitude !== 'undefined' ? longitude : window.localStorage.lng ;
 
-      if(isNaN(latitude) || isNaN(longitude)){alert('Coordonnées GPS indisponibles');}
+      if(isNaN(latitude) || isNaN(longitude)){
+          switch (lang){ 
+            case "en":
+              alert('GPS coordonates not available');
+            break;
+            case "es":
+              alert('GPS coordonates not available');
+            break;
+            case "de":
+              alert('GPS coordonates not available');
+            break;
+            default:
+              alert('Coordonnées GPS indisponibles');
+            break;
+          }
+      }
 
         var map = new google.maps.Map(document.getElementById('map-wrap'), {
           center: {lat:parseFloat(latitude), lng: parseFloat(longitude)},
@@ -2610,7 +2687,20 @@ function success_loc(positions)
 }
 
 function failure_loc(){
-  alert("Coordonnées GPS indisponible.")
+  switch (lang){ 
+    case "en":
+      alert('GPS coordonates not available');
+    break;
+    case "es":
+      alert('GPS coordonates not available');
+    break;
+    case "de":
+      alert('GPS coordonates not available');
+    break;
+    default:
+      alert('Coordonnées GPS indisponibles');
+    break;
+  }
 }
 
 // ----- end send my location
@@ -2674,7 +2764,7 @@ $(document).on('pagebeforeshow','#zwave_page', function() {
             var inclusion = "";
             inclusion += '<li class="inclusion_zwave succeed incl">';
             inclusion +=    '<a href="#inclusion_zwave_page" id="'+id_inclu+'" class ="'+ class_zwave +'" data-cont_id="'+ cont_id +'" data-nom_box="'+ nom_box +'"><span></span>';
-            inclusion +=        '<span class="box_name">Inclusion Z-Wave '+ nom_box +'</span>';
+            inclusion +=        '<span class="box_name"><span data-translate="true" class="no-bg rel-pos">Inclusion Z-Wave</span> '+ nom_box +'</span>';
             inclusion +=    '</a>';
             inclusion += '</li>';
             $("#ul-zwave" ).append(inclusion);
@@ -2682,7 +2772,7 @@ $(document).on('pagebeforeshow','#zwave_page', function() {
             var exinclusion = "";
             exinclusion += '<li class="inclusion_zwave failed excl">';
             exinclusion +=    '<a href="#exclusion_zwave_page" class ="'+ class_zwave +'" data-cont_id="'+ cont_id +'" data-nom_box="'+ nom_box +'"><span></span>';
-            exinclusion +=        '<span class="box_name">Exclusion Z-Wave '+ nom_box +'</span>';
+            exinclusion +=        '<span class="box_name"><span data-translate="true" class="no-bg rel-pos">Exclusion Z-Wave</span> '+ nom_box +'</span>';
             exinclusion +=    '</a>';
             exinclusion += '</li>';
             $("#ul-zwave" ).append(exinclusion);
@@ -2722,13 +2812,7 @@ $('#to-home-inclusion-zwave, #to-home-exclusion-zwave').on('click',function(){
 $(document).on('pagebeforeshow','#inclusion_zwave_page',function(){
     $('#include_id_box').html(localStorage.include_nom_box);
     $('#content-inclusion-zwave').html(
-        '<p>'+
-          'Avant de commancer:'+
-          '<br>'+
-          '- Regardez la notice de votre péripherique pour comprendre le fonctionnement de son boutton d\'inclusion (simple clic, triple clic, appui long ...)'+
-          '<br>'+
-         ' - Si inclus auparavant, veuillez vous assurer que votre péripherique a été préalablement exclu.'+
-        '</p>');
+        "<p data-translate='true'>Avant de commencer:<br>- Regardez la notice de votre péripherique pour comprendre le fonctionnement de son boutton d'inclusion (simple clic, triple clic, appui long ...)<br>Si inclus auparavant, veuillez vous assurer que votre péripherique a été préalablement exclu.</p>");
     var interval_incl;
     
     $(document).on('tap','#inclusion-launch',function(e){
@@ -2933,35 +3017,28 @@ $(document).on('pagebeforeshow','#exclusion_zwave_page',function(){
 
 // creation video_page and datepicker
 $(document).on('pagebeforeshow','#video_page',function(){
-  //Use French date
-  $.datepicker.regional['fr'] = {clearText: 'Effacer', clearStatus: '',
-    monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin',
-    'Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
-    monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun',
-    'Jul','Aoû','Sep','Oct','Nov','Déc'],
-    monthStatus: 'Voir un autre mois', yearStatus: 'Voir un autre année',
-    weekHeader: 'Sm', weekStatus: '',
-    dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-    dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
-    dayNamesMin: ['D','L','M','M','J','V','S'],
-    dateFormat:"yy-mm-dd",
 
-    firstDay: 1, isRTL: false};
-  $.datepicker.setDefaults($.datepicker.regional['fr']);
-  //end translation of dates
+  switch (lang){
+    case "fr":
+      $.datepicker.setDefaults($.datepicker.regional['fr']);
+    break;
+    case "es":
+      $.datepicker.setDefaults($.datepicker.regional['es']);
+    break;
+    case "de":
+      $.datepicker.setDefaults($.datepicker.regional['de']);
+    break;
+    default:
+    // default
+    break;
+  } 
 
-  /*// change date default format with -
-  Date.prototype.yyyymmddwith = function() {
-    var yyyy = this.getFullYear().toString();
-    var mm = (this.getMonth()+1).toString(); 
-    var dd  = this.getDate().toString();
-    return yyyy +'-'+ (mm[1]?mm:"0"+mm[0]) +'-'+ (dd[1]?dd:"0"+dd[0]);
-  };*/
+ 
   var current_day = new Date();
 
   $('#video_read, #video-indication').empty();
   $('#chose_date').fadeIn('fast');
-  $('#video_header').html( getName(id_camera,true) );
+  $('#video_header').html( getName(id_camera,true,true) );
   $('#my_date').val( current_day.yyyymmddwith() );
 
   $('#my_date').datepicker({
@@ -2971,9 +3048,14 @@ $(document).on('pagebeforeshow','#video_page',function(){
 });
 
 //= = = = = = = = = = = video         show_video
-$('#valide_date').on('click',function()
+$('#valide_date').on('click',function(e)
   {
-     var get_date;
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    $('#chose_date').addClass('disable-click');
+
+    var get_date;
 
     $('#popup_date').popup('close');
     show_loading();
@@ -2993,7 +3075,7 @@ $('#valide_date').on('click',function()
       },
       success: function(data_success){
         $('#video_read').html(data_success.msg);
-        var video_indication = getName(id_camera,true) + '<br>' + now + '<br>La génération de vidéo donne un aperçu de la journée sous forme de film.';
+        var video_indication = getName(id_camera,true,true) + '<br>' + now + '<br><span data-translate="true">La génération de vidéo donne un aperçu de la journée sous forme de film.</span>';
         $('#video-indication').html(video_indication);
         var video_loaded = '';
         
@@ -3015,7 +3097,7 @@ $('#valide_date').on('click',function()
                       // video en cours
                       if (data_load_video.status_id == 2)
                       {
-                        $('#video_read').html('Téléchargement '+data_load_video.msg);
+                        $('#video_read').html('<span data-translate="true">Téléchargement</span> '+data_load_video.msg);
                       }
                       else
                       {
@@ -3028,11 +3110,13 @@ $('#valide_date').on('click',function()
                           video_loaded +=  '<video src="https://'+ video_url_download+'" width=640 height=360 type="video/mp4" controls autoplay="true">'
                           video_loaded +=     'lecture camera';
                           video_loaded +=  '</video>';
-                          $('#chose_date').fadeOut('fast');
+                          $('#chose_date')
+                            .removeClass('disable-click') 
+                            .fadeOut('fast');
                           $('#video-indication').empty();
                           $('#video_header')
                             .empty()
-                            .html( getName(id_camera,true) +' (Vidéo)');
+                            .html( getName(id_camera,true,true) +' (Vidéo)');
                           $('#video_read').append(video_loaded);
                         }
 
@@ -3065,7 +3149,21 @@ $('#valide_date').on('click',function()
 
 //= = = = = = = = = = = history  a href="#history_page" data-filter-mvt="0"
 $(document).on('pagebeforeshow','#history_page',function(){
-    $('#ruban_search_history').addClass('hide_search_history').removeClass('show_search_history');
+
+    $('#ruban_search_history').addClass('hide_search_history').removeClass('show_search_history'); // remove yellow ban when coming to the page
+   
+   $('[data-tab]').on('tap',function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      var target = $(this).data('tab');
+      if ( target == 'history' ){
+          $('a[href=#menu_search_history]').fadeIn(); 
+      }else {
+          $('a[href=#menu_search_history]').fadeOut();
+      }
+    });
+
     $('#search_history').on('tap', function (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -3078,27 +3176,26 @@ $(document).on('pagebeforeshow','#history_page',function(){
 
           var current_day = new Date();
           $('#id_date').text( 'Jusqu\'à: '+ current_day.yyyymmddwith() );
-      }else{       
+      }else{  
         return false;
       }
       
     });
 
-       //Use French date
-    $.datepicker.regional['fr'] = {clearText: 'Effacer', clearStatus: '',
-      monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin',
-      'Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
-      monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun',
-      'Jul','Aoû','Sep','Oct','Nov','Déc'],
-      monthStatus: 'Voir un autre mois', yearStatus: 'Voir un autre année',
-      weekHeader: 'Sm', weekStatus: '',
-      dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-      dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
-      dayNamesMin: ['D','L','M','M','J','V','S'],
-      dateFormat:"yy-mm-dd",
-
-      firstDay: 1, isRTL: false};
-    $.datepicker.setDefaults($.datepicker.regional['fr']);
+    switch (lang){
+    case "fr":
+      $.datepicker.setDefaults($.datepicker.regional['fr']);
+    break;
+    case "es":
+      $.datepicker.setDefaults($.datepicker.regional['es']);
+    break;
+    case "de":
+      $.datepicker.setDefaults($.datepicker.regional['de']);
+    break;
+    default:
+    // default
+    break;
+  } 
 
     $('#my_date_history').datepicker({
       maxDate: new Date()
@@ -3113,34 +3210,7 @@ $(document).on('pagebeforeshow','#history_page',function(){
     var dd  = this.getDate().toString();
     return yyyy +'-'+ (mm[1]?mm:"0"+mm[0]) +'-'+ (dd[1]?dd:"0"+dd[0]);
   };
-
-  // $('#date_pick_history').on('tap', function(){
-  //   //Use French date
-  //   $.datepicker.regional['fr'] = {clearText: 'Effacer', clearStatus: '',
-  //     monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin',
-  //     'Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
-  //     monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun',
-  //     'Jul','Aoû','Sep','Oct','Nov','Déc'],
-  //     monthStatus: 'Voir un autre mois', yearStatus: 'Voir un autre année',
-  //     weekHeader: 'Sm', weekStatus: '',
-  //     dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-  //     dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
-  //     dayNamesMin: ['D','L','M','M','J','V','S'],
-  //     dateFormat:"yy-mm-dd",
-
-  //     firstDay: 1, isRTL: false};
-  //   $.datepicker.setDefaults($.datepicker.regional['fr']);
-  //   //end translation of dates
-
-  //   var current_day = new Date();
-
-  //    $('#date_pick_history').fadeIn('fast');
-
-  //   $('#my_date_history').datepicker({
-  //     maxDate: new Date()
-  //   });   
-
-  // });
+  
 
   $('#valider_history').on('click', function(e){
     e.preventDefault();

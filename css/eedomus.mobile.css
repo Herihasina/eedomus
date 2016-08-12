@@ -623,6 +623,9 @@
   background: #888;
   color: #fff;
 }
+#chose_date.disable-click{
+  pointer-events: none !important;
+}
 #my_date{
   text-align: center;
       border-bottom: 1px solid #ccc;
@@ -682,4 +685,12 @@
 
 #valider_history{
   margin-left: 20px;
+}
+
+#menu_search_history_trigger{
+  display: none;
+}
+.no-bg.rel-pos{
+  background: none !important;
+  position: relative!important;
 }

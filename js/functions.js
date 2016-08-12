@@ -562,7 +562,7 @@ function load_localization()
     });
   }
 
-  var onError = function(error) {
+  var onError = function(error,y,z) {
     console.log('Error during loading localization file');
   }
 
